@@ -6,6 +6,15 @@ import {
   OutlinedInput,
   Menu,
   ButtonGroup,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -19,6 +28,11 @@ const BrowsingOptions = () => {
   const [gridEl, setGridEl] = useState(null);
   const handleGridOpen = ({ currentTarget }) => setGridEl(currentTarget);
   const handleGridClose = () => setGridEl(null);
+
+  const [filterDialogState, setFilterDialogState] = useState(null);
+  const filterDialogOpen = ({ currentTarget }) =>
+    setFilterDialogState(currentTarget);
+  const filterDialogClose = () => setFilterDialogState(null);
 
   return (
     <Container container justify="space-between" alignItems="center">
@@ -36,11 +50,132 @@ const BrowsingOptions = () => {
           </SelectInput>
         </FormContainer>
       </Grid>
+
       <Grid item>
-        <Button color="primary" variant="outlined">
+        <Button color="primary" variant="outlined" onClick={filterDialogOpen}>
           <FilterListIcon style={{ marginRight: '10px' }} />
           Filter
         </Button>
+
+        <Dialog
+          onClose={filterDialogClose}
+          aria-labelledby="simple-dialog-title"
+          open={filterDialogState}
+        >
+          <DialogTitle id="simple-dialog-title" align="center">
+            Filter Items
+          </DialogTitle>
+          <DialogContent>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Copy Types</FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked onChange={() => null} value="gilad" />
+                  }
+                  label="Headers"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={jason}
+                      onChange={() => null}
+                      value="jason"
+                    />
+                  }
+                  label="CTAs"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={antoine}
+                      onChange={() => null}
+                      value="antoine"
+                    />
+                  }
+                  label="Newsletter"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={antoine}
+                      onChange={() => null}
+                      value="antoine"
+                    />
+                  }
+                  label="FAQ"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={antoine}
+                      onChange={() => null}
+                      value="antoine"
+                    />
+                  }
+                  label="Slogans"
+                />
+              </FormGroup>
+            </FormControl>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Project Types</FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked onChange={() => null} value="gilad" />
+                  }
+                  label="Full Projects"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={jason}
+                      onChange={() => null}
+                      value="jason"
+                    />
+                  }
+                  label="Email Subscriptions"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={antoine}
+                      onChange={() => null}
+                      value="antoine"
+                    />
+                  }
+                  label="About Pages"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={antoine}
+                      onChange={() => null}
+                      value="antoine"
+                    />
+                  }
+                  label="Social Media"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // checked={antoine}
+                      onChange={() => null}
+                      value="antoine"
+                    />
+                  }
+                  label="Testimonials"
+                />
+              </FormGroup>
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={filterDialogClose}>
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <Button
           color="primary"
           variant="outlined"
@@ -51,6 +186,7 @@ const BrowsingOptions = () => {
         >
           <AppsIcon />
         </Button>
+
         <Menu
           id="simple-menu"
           anchorEl={gridEl}

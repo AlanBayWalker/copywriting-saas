@@ -1,12 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider, StylesProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
-import ExploreProjects from '../ExploreProjects/ExploreProjects';
-import ProjectWorkspace from '../ProjectWorkspace/ProjectWorkspace';
-import UserProfile from '../UserProfile/UserProfile';
-import LogIn from '../LogIn/LogIn';
+import Routes from '../Routes/Routes';
+import { Provider } from '../../utility/context';
 
 const theme = createMuiTheme({
   palette: {
@@ -42,20 +39,14 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-    <Router>
-      <ThemeProvider className="App">
-        <ThemeProvider theme={theme}>
-          <StylesProvider injectFirst>
-            <CssBaseline />
-            {/* <Redirect from="/" to="/explore" /> */}
-            <Route path="/explore" component={ExploreProjects} />
-            <Route path="/workspace" component={ProjectWorkspace} />
-            <Route exact path="/login" component={LogIn} />
-            <Route exact path="/profile" component={UserProfile} />
-          </StylesProvider>
-        </ThemeProvider>
+    <Provider>
+      <ThemeProvider theme={theme}>
+        <StylesProvider injectFirst>
+          <CssBaseline />
+          <Routes />
+        </StylesProvider>
       </ThemeProvider>
-    </Router>
+    </Provider>
   );
 }
 

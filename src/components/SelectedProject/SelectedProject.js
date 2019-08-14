@@ -10,8 +10,7 @@ const SelectedProject = () => {
   return (
     <>
       <Tabs
-        name="hi"
-        centered
+        name="Switch"
         value={sectionState}
         onChange={sectionHandler}
         aria-label="simple tabs example"
@@ -26,8 +25,15 @@ const SelectedProject = () => {
           id="simple-tab-1"
           aria-controls="simple-tabpanel-1"
         />
+        <Tab
+          label="Benefits"
+          id="simple-tab-2"
+          aria-controls="simple-tabpanel-2"
+        />
       </Tabs>
-      {sectionState === 0 ? <BrandStory /> : <BrainStorm />}
+      <div style={{ padding: '0 2rem' }}>
+        {sectionState === 0 ? <BrandStory /> : <BrainStorm />}
+      </div>
     </>
   );
 };

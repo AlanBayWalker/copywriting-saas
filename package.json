@@ -5,11 +5,20 @@
   "dependencies": {
     "@material-ui/core": "^4.3.0",
     "@material-ui/icons": "^4.2.1",
+    "animejs": "^3.1.0",
+    "css-element-queries": "^1.2.1",
+    "fabric": "^3.3.2",
+    "history": "^4.9.0",
+    "interactjs": "^1.5.4",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-color": "^2.17.3",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

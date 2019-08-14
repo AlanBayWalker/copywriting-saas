@@ -1,19 +1,28 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
+import _ from 'lodash';
 import BrowseItem from '../BrowseItem/BrowseItem';
+import projects from '../../utility/projects';
 
-const GridItem = ({ path }) => (
-  <Grid item xs={3}>
-    <BrowseItem path={path} />
-  </Grid>
-);
+const projectsRender = path =>
+  projects.map(config => (
+    <Grid item xs={3}>
+      <BrowseItem path={path} {...config} />
+    </Grid>
+  ));
 
-const generateList = (items, path) => {
-  const list = [];
-  for (let i = 0; i < items; i++) {
-    list.push(<GridItem path={path} />);
-  }
-  return list;
+const projectCopyRender = path => {
+  const linkMatch = path.split('/')[2];
+  const [config] = projects.filter(({ link }) => link === linkMatch);
+  const result = [];
+  _.times(8, () => {
+    result.push(
+      <Grid item xs={3}>
+        <BrowseItem path={path} {...config} />
+      </Grid>
+    );
+  });
+  return result;
 };
 
 const BrowseGrid = ({ path }) => (
@@ -23,7 +32,9 @@ const BrowseGrid = ({ path }) => (
     spacing={8}
     style={{ margin: 0, padding: '2rem 0', maxWidth: '100%' }}
   >
-    {generateList(12, path)}
+    {path.split('/').length < 3
+      ? projectsRender(path)
+      : projectCopyRender(path)}
   </Grid>
 );
 
