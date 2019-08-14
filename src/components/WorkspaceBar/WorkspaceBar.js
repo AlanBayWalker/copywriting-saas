@@ -5,7 +5,7 @@ import WorkspaceBrowser from '../WorkspaceBrowser/WorkspaceBrowser';
 
 const WorkspaceBar = ({ path }) => {
   const pathHandler = (originalProject, cloneProject) =>
-    path.split('/').length < 3 ? originalProject : cloneProject;
+    path.split('/')[2] === 'browse' ? cloneProject : originalProject;
 
   return (
     <Container>

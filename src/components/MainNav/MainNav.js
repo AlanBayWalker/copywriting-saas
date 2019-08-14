@@ -13,9 +13,10 @@ import Link from '../Link/Link';
 import NavLink from '../NavLink/NavLink';
 import SearchBar from '../SearchBar/SearchBar';
 import Logo from '../../assets/logo.png';
+import { withContext } from '../../utility/context';
 
 const AuthButtons = () => (
-  <>
+  <Grid container justify="space-between">
     <Grid item>
       <Link to="/login">
         <Button color="secondary" variant="contained">
@@ -28,13 +29,17 @@ const AuthButtons = () => (
         Sign Up
       </Button>
     </Grid>
-  </>
+  </Grid>
 );
 
-const UserMenu = () => {
+const UserMenu = ({ contextHandler }) => {
   const [menuState, setMenuState] = useState(null);
   const menuOpenHandler = ({ currentTarget }) => setMenuState(currentTarget);
   const menuCloseHandler = () => setMenuState(null);
+  const logOutHandler = () => {
+    contextHandler({ isAuthenticated: false });
+    menuCloseHandler();
+  };
 
   return (
     <>
@@ -60,26 +65,28 @@ const UserMenu = () => {
           <MenuItem onClick={menuCloseHandler}>My account</MenuItem>
         </Link>
 
-        <Link to="/swipe-file">
-          <MenuItem onClick={menuCloseHandler}>Swipe FIle</MenuItem>
+        <Link to="/swipe-folder">
+          <MenuItem onClick={menuCloseHandler}>Swipe Folder</MenuItem>
         </Link>
 
         <Link to="/login">
-          <MenuItem onClick={menuCloseHandler}>Logout</MenuItem>
+          <MenuItem onClick={logOutHandler}>Logout</MenuItem>
         </Link>
       </Menu>
     </>
   );
 };
 
-const MainNav = () => (
+const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
   <AppBar color="white" position="static">
     <Toolbar>
       <Grid container justify="space-between">
-        <Grid item sm={9}>
+        <Grid item sm={8}>
           <Grid container alignItems="center" spacing={3}>
             <Grid item>
-              <img src={Logo} alt="Swipe Camp" />
+              <Link to="/">
+                <img src={Logo} alt="Swipe Camp" />
+              </Link>
             </Grid>
             <Grid item>
               <NavLink to="/explore">
@@ -97,8 +104,7 @@ const MainNav = () => (
             </Grid>
           </Grid>
         </Grid>
-
-        <Grid item sm={3}>
+        <Grid item sm={4}>
           <Grid
             container
             justify="space-between"
@@ -107,7 +113,13 @@ const MainNav = () => (
             <Grid item>
               <SearchBar />
             </Grid>
-            {true ? <UserMenu /> : <AuthButtons />}
+            <Grid item xs={isAuthenticated ? 1 : 4}>
+              {isAuthenticated ? (
+                <UserMenu contextHandler={contextHandler} />
+              ) : (
+                <AuthButtons />
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -115,4 +127,4 @@ const MainNav = () => (
   </AppBar>
 );
 
-export default MainNav;
+export default withContext(MainNav);

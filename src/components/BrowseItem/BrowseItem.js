@@ -5,28 +5,36 @@ import Typography from '../Typography/Typography';
 import BrowseItemModal from '../BrowseItemModal/BrowseItemModal';
 import Thumbnail from '../../assets/item-thumbnail.png';
 
-const BrowseItem = ({ path }) => {
+const BrowseItem = ({
+  path,
+  title,
+  thumbnail,
+  author,
+  description,
+  categories,
+  link,
+}) => {
   const [dialogStatus, setDialogStatus] = useState(false);
   const dialogCloseHandler = () => setDialogStatus(false);
   const dialogOpenHandler = () => setDialogStatus(true);
 
   const pathHandler = (originalProject, cloneProject) =>
-    path.split('/').length < 3 ? originalProject : cloneProject;
+    path.split('/')[2] === 'browse' ? cloneProject : originalProject;
 
   return (
     <>
       <CardContainer onClick={dialogOpenHandler}>
         <CardActionArea>
-          <CardImage image={Thumbnail} title="Project Name" />
+          <CardImage image={thumbnail} title={title} />
         </CardActionArea>
         <CardInfoBar>
           <Grid container justify="space-between" alignItems="center">
             <Grid item style={{ display: 'flex', flexDirection: 'column' }}>
               <Typography color="bold" gutter="0 0" variant="">
-                Project Title
+                {title}
               </Typography>
               <Typography texColor="light" gutter="0 0" variant="caption">
-                {pathHandler('Created', 'Cloned')} By: AlanBayWalker
+                {pathHandler('Created', 'Cloned')} By: {author}
               </Typography>
             </Grid>
             <Grid item>
@@ -49,6 +57,12 @@ const BrowseItem = ({ path }) => {
         dialogStatus={dialogStatus}
         dialogCloseHandler={dialogCloseHandler}
         path={path}
+        title={title}
+        thumbnail={thumbnail}
+        author={author}
+        description={description}
+        link={link}
+        categories={categories}
       />
     </>
   );

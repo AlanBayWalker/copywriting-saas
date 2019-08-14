@@ -12,18 +12,7 @@ import {
 } from './styles';
 import Typography from '../Typography/Typography';
 import ProfileAvatarImage from '../../assets/profile-avatar.jpg';
-
-const projectsRender = path => {
-  const res = [];
-  for (let i = 0; i < 6; i++) {
-    res.push(
-      <Grid item md={4}>
-        <BrowseItem path={path} />
-      </Grid>
-    );
-  }
-  return res;
-};
+import projects from '../../utility/projects';
 
 const UserProfile = ({ location: { pathname } }) => (
   <>
@@ -53,7 +42,14 @@ const UserProfile = ({ location: { pathname } }) => (
         velit esse.
       </Typography>
       <ProjectsContainer container spacing={5}>
-        {projectsRender(pathname)}
+        {projects.map(
+          (config, index) =>
+            index < 6 && (
+              <Grid item md={4}>
+                <BrowseItem path={pathname} {...config} />
+              </Grid>
+            )
+        )}
       </ProjectsContainer>
     </Container>
   </>
