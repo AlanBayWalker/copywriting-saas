@@ -10,6 +10,7 @@ import anime from 'animejs';
 import CanvasObjects from './CanvasObjects';
 import CurvedLink from '../workflow/link/CurvedLink';
 import Arrow from './Arrow';
+import './styles.css';
 
 const defaultCanvasOption = {
     preserveObjectStacking: true,

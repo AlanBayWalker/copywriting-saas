@@ -27,6 +27,7 @@ export const FooterToolbarContainer = styled.div`
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 5000;
 `;
 
 export const VerticalDivider = styled.span`
