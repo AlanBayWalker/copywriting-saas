@@ -58,6 +58,5 @@
     "eslint-plugin-react-hooks": "^1.6.1",
     "gh-pages": "^2.1.1",
     "prettier": "^1.18.2"
-  },
-  "homepage": "http://alanbaywalker.github.io/copywriting-saas"
+  }
 }
