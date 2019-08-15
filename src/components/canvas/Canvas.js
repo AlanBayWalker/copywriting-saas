@@ -10,7 +10,6 @@ import anime from 'animejs';
 import CanvasObjects from './CanvasObjects';
 import CurvedLink from '../workflow/link/CurvedLink';
 import Arrow from './Arrow';
-import './styles.css';
 
 const defaultCanvasOption = {
     preserveObjectStacking: true,
@@ -4227,6 +4226,7 @@ class Canvas extends Component {
                 if (this.handlers.isElementType(opt.target.type)) {
                     return false;
                 }
+                console.log(opt);
                 if (opt.target.id !== 'workarea') {
                     if (opt.target !== this.target) {
                         this.tooltipHandlers.show(opt.target);

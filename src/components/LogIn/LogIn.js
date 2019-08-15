@@ -59,6 +59,7 @@ const LogIn = ({ contextHandler, context: { isAuthenticated } }) => {
           onChange={usernameHandler}
         />
         <TextField
+          type="password"
           fullWidth
           label="Password"
           margin="normal"

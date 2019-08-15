@@ -330,22 +330,14 @@ class ImageMapEditor extends Component {
       this.canvasRef.canvas.requestRenderAll();
     },
     onTooltip: (ref, target) => {
+      console.log(target, 'target');
       const value = Math.random() * 10 + 1;
       const { animations, styles } = this.state;
       // const { code } = target.trigger;
       // const compile = SandBox.compile(code);
       // const result = compile(value, animations, styles, target.userProperty);
       // console.log(result);
-      return (
-        <div>
-          <div>
-            <div>
-              <Button>{target.id}</Button>
-            </div>
-            <Badge>{value}</Badge>
-          </div>
-        </div>
-      );
+      return <div>{target.name}</div>;
     },
     onLink: (canvas, target) => {
       const { link } = target;
