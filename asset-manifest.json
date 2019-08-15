@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.js": "/copywriting-saas/static/js/main.c9195bc0.chunk.js",
+    "main.js.map": "/copywriting-saas/static/js/main.c9195bc0.chunk.js.map",
+    "runtime~main.js": "/copywriting-saas/static/js/runtime~main.a1245284.js",
+    "runtime~main.js.map": "/copywriting-saas/static/js/runtime~main.a1245284.js.map",
+    "static/js/2.739a9a12.chunk.js": "/copywriting-saas/static/js/2.739a9a12.chunk.js",
+    "static/js/2.739a9a12.chunk.js.map": "/copywriting-saas/static/js/2.739a9a12.chunk.js.map",
+    "index.html": "/copywriting-saas/index.html",
+    "precache-manifest.d5cb5cba59eaa93ccfc38b31695d4a67.js": "/copywriting-saas/precache-manifest.d5cb5cba59eaa93ccfc38b31695d4a67.js",
+    "service-worker.js": "/copywriting-saas/service-worker.js",
+    "static/media/item-thumbnail.png": "/copywriting-saas/static/media/item-thumbnail.af82c420.png",
+    "static/media/profile-avatar.jpg": "/copywriting-saas/static/media/profile-avatar.370a9c96.jpg",
+    "static/media/profile-background.png": "/copywriting-saas/static/media/profile-background.a73f8825.png"
+  }
+}
