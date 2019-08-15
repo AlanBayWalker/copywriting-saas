@@ -26,9 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "lint:fix": "eslint . --fix"
   },
   "eslintConfig": {
     "extends": "wesbos"
@@ -59,6 +57,5 @@
     "eslint-plugin-react-hooks": "^1.6.1",
     "gh-pages": "^2.1.1",
     "prettier": "^1.18.2"
-  },
-  "homepage": "http://alanbaywalker.github.io/copywriting-saas"
+  }
 }
