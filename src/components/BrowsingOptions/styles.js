@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Grid, FormControl, Select } from '@material-ui/core';
 
 export const Container = styled(Grid)`
-  background-color: #f4f4f4;
   padding: 1rem 2rem;
 `;
 

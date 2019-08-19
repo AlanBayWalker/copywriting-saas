@@ -30,7 +30,12 @@ const BrowseGrid = ({ path }) => (
     container
     justify="space-between"
     spacing={8}
-    style={{ margin: 0, padding: '2rem 0', maxWidth: '100%' }}
+    style={{
+      backgroundColor: '#f4f4f4',
+      margin: 0,
+      padding: '2rem 0',
+      maxWidth: '100%',
+    }}
   >
     {path.split('/').length < 3
       ? projectsRender(path)

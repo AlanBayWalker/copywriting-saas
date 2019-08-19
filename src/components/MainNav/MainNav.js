@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  Grid,
-  AppBar,
-  Toolbar,
-  Button,
-  Menu,
-  MenuItem,
-} from '@material-ui/core';
+import { Grid, Toolbar, Button, Menu, MenuItem } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Container } from './styles';
 import Typography from '../Typography/Typography';
 import Link from '../Link/Link';
 import NavLink from '../NavLink/NavLink';
@@ -48,7 +42,7 @@ const UserMenu = ({ contextHandler }) => {
         aria-haspopup="true"
         onClick={menuOpenHandler}
       >
-        <AccountCircleIcon />
+        <AccountCircleIcon style={{ fill: '#fff' }} />
       </Button>
       <Menu
         id="simple-menu"
@@ -78,14 +72,18 @@ const UserMenu = ({ contextHandler }) => {
 };
 
 const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
-  <AppBar color="white" position="static">
+  <Container color="white" position="static">
     <Toolbar>
-      <Grid container justify="space-between">
+      <Grid container justify="space-between" alignItems="center">
         <Grid item sm={8}>
           <Grid container alignItems="center" spacing={3}>
             <Grid item>
               <Link to="/">
-                <img src={Logo} alt="Swipe Camp" />
+                <img
+                  src={Logo}
+                  alt="Swipe Camp"
+                  style={{ height: 'auto', maxWidth: '200px' }}
+                />
               </Link>
             </Grid>
             <Grid item>
@@ -106,6 +104,7 @@ const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
         </Grid>
         <Grid item sm={4}>
           <Grid
+            alignItems="center"
             container
             justify="space-between"
             style={{ marginTop: '.5rem' }}
@@ -124,7 +123,7 @@ const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
         </Grid>
       </Grid>
     </Toolbar>
-  </AppBar>
+  </Container>
 );
 
 export default withContext(MainNav);

@@ -40,7 +40,7 @@ export default [
     author: 'AlanBayWalker',
     categories: ['Payment', 'Tech', 'Ecommerce', 'Start-Up', 'Web', 'Design'],
     description:
-      "A Big Bad Wolf approaches her, and asks where she’s going. She naively tells him where her grandmother’s house is, so he suggests she picks some flowers as a present for her. While she’s distracted, he breaks into Little Red Riding Hood’s grandmother's house, eats her, and puts on her clothes to impersonate her.",
+      'Gratify is a new intuitive payment system that makes it easier to checkout using 1 click payments. With over 300,000 users at launch Gratify has positioned itself at the top of the payment system market. The platform allows you to create an account using social media profiles making the app easy to use. Most users spend 2 minutes on set up.',
     link: 'gratify',
   },
   {
