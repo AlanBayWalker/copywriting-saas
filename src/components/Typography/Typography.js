@@ -26,12 +26,12 @@ const gutterHandler = values => {
 };
 
 const Typography = styled(Text)`
-  color: ${({ color }) => colorHandler(color)};
+  color: ${({ textcolor }) => colorHandler(textcolor)};
   margin: ${({ gutter }) => gutterHandler(gutter)};
 `;
 
-const TextElement = ({ component: Component, color, ...rest }) => (
-  <Typography color={color} {...rest} />
+const TextElement = ({ color, ...rest }) => (
+  <Typography textcolor={color} {...rest} />
 );
 
 export default TextElement;

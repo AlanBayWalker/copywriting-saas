@@ -57,10 +57,6 @@ const UserMenu = ({ contextHandler }) => {
           <MenuItem onClick={menuCloseHandler}>Profile</MenuItem>
         </Link>
 
-        <Link to="/my-account">
-          <MenuItem onClick={menuCloseHandler}>My account</MenuItem>
-        </Link>
-
         <Link to="/swipe-folder">
           <MenuItem onClick={menuCloseHandler}>Swipe Folder</MenuItem>
         </Link>

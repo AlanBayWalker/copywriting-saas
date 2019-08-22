@@ -29,10 +29,10 @@ const BrowseItem = ({
         <CardInfoBar>
           <Grid container justify="space-between" alignItems="center">
             <Grid item style={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography color="bold" gutter="0 0" variant="">
+              <Typography color="bold" gutter="0 0">
                 {title}
               </Typography>
-              <Typography texColor="light" gutter="0 0" variant="caption">
+              <Typography gutter="0 0" variant="caption">
                 {pathHandler('Created', 'Cloned')} By: {author}
               </Typography>
             </Grid>

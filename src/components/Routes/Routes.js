@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { Router, Route, Redirect } from 'react-router-dom';
 import history from '../../utility/history';
 import ExploreProjects from '../ExploreProjects/ExploreProjects';
 import UserProfile from '../UserProfile/UserProfile';
@@ -30,6 +30,7 @@ const PrivateRoute = withContext(({ component: Component, ...rest }) => (
 const Routes = () => (
   <Router history={history}>
     <Route exact path="/" component={ExploreProjects} />
+    <Route exact path="/explore/:id" component={ExploreProjects} />
     <Route exact path="/login" component={LogIn} />
     <PrivateRoute exact path="/swipe-folder" component={SwipeFolder} />
     <PrivateRoute

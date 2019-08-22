@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Switch, Tooltip } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import PanToolIcon from '@material-ui/icons/PanTool';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';

@@ -80,7 +80,7 @@ const BrowsingOptions = () => {
         <Dialog
           onClose={filterDialogClose}
           aria-labelledby="simple-dialog-title"
-          open={filterDialogState}
+          open={Boolean(filterDialogState)}
         >
           <DialogTitle id="simple-dialog-title" align="center">
             Filter Items

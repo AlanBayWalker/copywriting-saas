@@ -55,14 +55,15 @@ export const Content = styled.div`
 
 export const FormatButton = styled(Button)`
   ${({ active }) =>
-    active &&
-    css`
-      background-color: rgb(46, 204, 113, 0.05);
+    active
+      ? css`
+          background-color: rgb(46, 204, 113, 0.05);
 
-      .font-format-icon {
-        fill: rgb(46, 204, 113, 0.5);
-      }
-    `}
+          .font-format-icon {
+            fill: rgb(46, 204, 113, 0.5);
+          }
+        `
+      : null}
 `;
 
 const IconStyles = css`

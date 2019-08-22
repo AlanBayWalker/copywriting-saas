@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ResizeSensor } from 'css-element-queries';
 import debounce from 'lodash/debounce';
-import { Grid, Button, Badge } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Canvas from '../canvas/Canvas';
 import ImageMapFooterToolbar from './ImageMapFooterToolbar';
 import ImageMapItems from './ImageMapItems';

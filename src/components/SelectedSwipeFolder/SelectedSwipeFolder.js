@@ -4,13 +4,13 @@ import BrowseGrid from '../BrowseGrid/BrowseGrid';
 import Typography from '../Typography/Typography';
 
 const SelectedSwipeFolder = ({ location: { pathname } }) => (
-  <div>
+  <>
     <MainNav />
-    <Typography variant="h3" align="center" gutter="4rem 0 0">
+    <Typography variant="h3" align="center" gutter="2rem">
       Newspaper Copy Folder
     </Typography>
     <BrowseGrid path={pathname} />
-  </div>
+  </>
 );
 
 export default SelectedSwipeFolder;

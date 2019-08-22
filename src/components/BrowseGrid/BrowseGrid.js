@@ -37,7 +37,7 @@ const BrowseGrid = ({ path }) => (
       maxWidth: '100%',
     }}
   >
-    {path.split('/').length < 3
+    {path.split('/').length < 3 || path.split('/')[1] === 'swipe-folder'
       ? projectsRender(path)
       : projectCopyRender(path)}
   </Grid>

@@ -276,7 +276,7 @@ class ImageMapItems extends Component {
   render() {
     const { onAddItem } = this.handlers;
     const { onDragStart, onDragEnd } = this.events;
-    const { warning, warningMessage, colorPickerMenu } = this.state;
+    const { warning, warningMessage } = this.state;
     const { onSaveImage, onDeleteText, selectedItem } = this.props;
 
     const item = {
@@ -412,7 +412,11 @@ class ImageMapItems extends Component {
           <Tooltip title={title} key={title}>
             <FormatButton
               onClick={onClick}
-              active={this.getTextValue()[active.property] === active.value}
+              active={
+                this.getTextValue()[active.property] === active.value
+                  ? true
+                  : undefined
+              }
             >
               <Icon className="font-format-icon" />
             </FormatButton>
@@ -455,7 +459,7 @@ class ImageMapItems extends Component {
 
         <Tooltip title="Font Size">
           <Select
-            value={textValues.fontSize}
+            value={textValues.fontSize ? textValues.fontSize : 0}
             onChange={this.textHandlers.fontSizeHandler}
             inputProps={{
               name: 'age',
@@ -464,7 +468,9 @@ class ImageMapItems extends Component {
             style={{ margin: '0 10px' }}
           >
             {_.times(60, i => (
-              <MenuItem value={i}>{i}</MenuItem>
+              <MenuItem value={i} key={i}>
+                {i}
+              </MenuItem>
             ))}
           </Select>
         </Tooltip>
@@ -472,7 +478,7 @@ class ImageMapItems extends Component {
         <Tooltip title="Opacity">
           <TextField
             id="standard-number"
-            value={selectedItem ? selectedItem.opacity : null}
+            value={selectedItem ? selectedItem.opacity : 1}
             onChange={this.textHandlers.opacityHandler}
             type="number"
             InputProps={{ inputProps: { min: 0, max: 1, step: '0.1' } }}

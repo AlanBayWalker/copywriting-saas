@@ -36,15 +36,16 @@ const BrowseItemModal = ({
           alt={title}
           style={{ height: 'auto', marginBottom: '2rem', width: '100%' }}
         />
-        {categories.map(name => (
-          <Chip
-            key={name}
-            color="primary"
-            label={name}
-            variant="outlined"
-            style={{ margin: '0 10px 2rem 0' }}
-          />
-        ))}
+        {categories &&
+          categories.map(name => (
+            <Chip
+              key={name}
+              color="primary"
+              label={name}
+              variant="outlined"
+              style={{ margin: '0 10px 2rem 0' }}
+            />
+          ))}
         <DialogContentText>{description}</DialogContentText>
       </DialogContent>
       <DialogActions
