@@ -26,7 +26,7 @@ const LogIn = ({ contextHandler, context: { isAuthenticated } }) => {
     }
   };
 
-  if (isAuthenticated) return <Redirect to="/explore" />;
+  if (isAuthenticated) return <Redirect to="/" />;
 
   return (
     <Container maxWidth="sm">

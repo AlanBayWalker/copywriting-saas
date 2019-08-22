@@ -30,7 +30,7 @@ const Typography = styled(Text)`
   margin: ${({ gutter }) => gutterHandler(gutter)};
 `;
 
-const TextElement = ({ component: Component, color: color, ...rest }) => (
+const TextElement = ({ component: Component, color, ...rest }) => (
   <Typography color={color} {...rest} />
 );
 

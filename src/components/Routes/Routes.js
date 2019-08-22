@@ -29,9 +29,8 @@ const PrivateRoute = withContext(({ component: Component, ...rest }) => (
 
 const Routes = () => (
   <Router history={history}>
-    <Route exact path="/" render={() => <Redirect to="/explore" />} />
+    <Route exact path="/" component={ExploreProjects} />
     <Route exact path="/login" component={LogIn} />
-    <Route path="/explore" component={ExploreProjects} />
     <PrivateRoute exact path="/swipe-folder" component={SwipeFolder} />
     <PrivateRoute
       exact

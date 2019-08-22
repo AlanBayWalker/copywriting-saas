@@ -3,12 +3,12 @@ import { Grid, Button } from '@material-ui/core';
 import ProfileBackground from '../../assets/profile-background.png';
 
 export const Header = styled.header`
-  background: #fff url(${ProfileBackground}) center center no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url(${ProfileBackground}) center center no-repeat;
   background-size: cover;
   height: 300px;
   margin-bottom: 150px;
   position: relative;
-  width: 100%;
 `;
 
 export const HeaderContent = styled.div`
@@ -20,7 +20,9 @@ export const HeaderContent = styled.div`
 `;
 
 export const EditProfileButton = styled(Button)`
-  margin: 2rem 0 0 90vw;
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
 `;
 
 export const ProfileAvatar = styled.img`

@@ -27,7 +27,7 @@ import { Container, FormContainer, SelectInput } from './styles';
 const renderCategoryItems = () => {
   const items = ['All', 'Landing Pages', 'Headlines', 'Slogans', 'CTAs'];
   return items.map(item => (
-    <Grid item>
+    <Grid item key={item}>
       <Link to="/">
         <Typography>{item}</Typography>
       </Link>

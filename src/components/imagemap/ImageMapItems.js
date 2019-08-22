@@ -409,7 +409,7 @@ class ImageMapItems extends Component {
 
       _.map(items, ({ title, onClick, Icon, active }) => {
         res.push(
-          <Tooltip title={title}>
+          <Tooltip title={title} key={title}>
             <FormatButton
               onClick={onClick}
               active={this.getTextValue()[active.property] === active.value}

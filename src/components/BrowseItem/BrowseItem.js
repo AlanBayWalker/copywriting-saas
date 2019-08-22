@@ -3,7 +3,6 @@ import { Grid, CardActionArea, Button } from '@material-ui/core';
 import { CardContainer, CardImage, CardInfoBar } from './styles';
 import Typography from '../Typography/Typography';
 import BrowseItemModal from '../BrowseItemModal/BrowseItemModal';
-import Thumbnail from '../../assets/item-thumbnail.png';
 
 const BrowseItem = ({
   path,

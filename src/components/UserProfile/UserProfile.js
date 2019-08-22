@@ -41,11 +41,11 @@ const UserProfile = ({ location: { pathname } }) => (
         commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
         velit esse.
       </Typography>
-      <ProjectsContainer container spacing={5}>
+      <ProjectsContainer justify="center" container spacing={3}>
         {projects.map(
           (config, index) =>
             index < 6 && (
-              <Grid item md={4}>
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <BrowseItem path={pathname} {...config} />
               </Grid>
             )

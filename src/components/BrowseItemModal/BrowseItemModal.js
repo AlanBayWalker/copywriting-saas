@@ -38,6 +38,7 @@ const BrowseItemModal = ({
         />
         {categories.map(name => (
           <Chip
+            key={name}
             color="primary"
             label={name}
             variant="outlined"

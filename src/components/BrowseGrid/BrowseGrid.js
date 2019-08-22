@@ -6,7 +6,7 @@ import projects from '../../utility/projects';
 
 const projectsRender = path =>
   projects.map(config => (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Grid item xs={12} sm={6} md={4} lg={3} key={config.title}>
       <BrowseItem path={path} {...config} />
     </Grid>
   ));

@@ -65,7 +65,7 @@ const UserMenu = ({ contextHandler }) => {
           <MenuItem onClick={menuCloseHandler}>Swipe Folder</MenuItem>
         </Link>
 
-        <Link to="/login">
+        <Link to="/">
           <MenuItem onClick={logOutHandler}>Logout</MenuItem>
         </Link>
       </Menu>
@@ -74,7 +74,7 @@ const UserMenu = ({ contextHandler }) => {
 };
 
 const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
-  <Container color="white" position="static">
+  <Container position="static">
     <Toolbar>
       <Grid container justify="space-between" alignItems="center">
         <Grid item>
