@@ -7,7 +7,7 @@ export const CardImage = styled(CardMedia)`
 
 export const CardInfoBar = styled(CardActions)`
   background-color: #fff;
-  bottom: -50px;
+  bottom: -100px;
   left: 0;
   position: absolute;
   transition: bottom 0.2s;

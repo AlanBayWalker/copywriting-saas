@@ -19,7 +19,21 @@ import {
 import AppsIcon from '@material-ui/icons/Apps';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
+import Link from '../Link/Link';
+
+import Typography from '../Typography/Typography';
 import { Container, FormContainer, SelectInput } from './styles';
+
+const renderCategoryItems = () => {
+  const items = ['All', 'Landing Pages', 'Headlines', 'Slogans', 'CTAs'];
+  return items.map(item => (
+    <Grid item>
+      <Link to="/">
+        <Typography>{item}</Typography>
+      </Link>
+    </Grid>
+  ));
+};
 
 const BrowsingOptions = () => {
   const [selectState, setSelectState] = useState('popular');
@@ -49,6 +63,12 @@ const BrowsingOptions = () => {
             <MenuItem value="trending">Trending</MenuItem>
           </SelectInput>
         </FormContainer>
+      </Grid>
+
+      <Grid item>
+        <Grid container spacing={5}>
+          {renderCategoryItems()}
+        </Grid>
       </Grid>
 
       <Grid item>

@@ -10,7 +10,7 @@ import Logo from '../../assets/logo.png';
 import { withContext } from '../../utility/context';
 
 const AuthButtons = () => (
-  <Grid container justify="space-between">
+  <>
     <Grid item>
       <Link to="/login">
         <Button color="secondary" variant="contained">
@@ -23,7 +23,7 @@ const AuthButtons = () => (
         Sign Up
       </Button>
     </Grid>
-  </Grid>
+  </>
 );
 
 const UserMenu = ({ contextHandler }) => {
@@ -37,13 +37,15 @@ const UserMenu = ({ contextHandler }) => {
 
   return (
     <>
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={menuOpenHandler}
-      >
-        <AccountCircleIcon style={{ fill: '#fff' }} />
-      </Button>
+      <Grid item>
+        <Button
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          onClick={menuOpenHandler}
+        >
+          <AccountCircleIcon style={{ fill: '#fff' }} />
+        </Button>
+      </Grid>
       <Menu
         id="simple-menu"
         anchorEl={menuState}
@@ -75,7 +77,7 @@ const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
   <Container color="white" position="static">
     <Toolbar>
       <Grid container justify="space-between" alignItems="center">
-        <Grid item sm={8}>
+        <Grid item>
           <Grid container alignItems="center" spacing={3}>
             <Grid item>
               <Link to="/">
@@ -102,23 +104,16 @@ const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
             </Grid>
           </Grid>
         </Grid>
-        <Grid item sm={4}>
-          <Grid
-            alignItems="center"
-            container
-            justify="space-between"
-            style={{ marginTop: '.5rem' }}
-          >
+        <Grid item>
+          <Grid container justify="flex-end" spacing={2}>
             <Grid item>
               <SearchBar />
             </Grid>
-            <Grid item xs={isAuthenticated ? 1 : 4}>
-              {isAuthenticated ? (
-                <UserMenu contextHandler={contextHandler} />
-              ) : (
-                <AuthButtons />
-              )}
-            </Grid>
+            {isAuthenticated ? (
+              <UserMenu contextHandler={contextHandler} />
+            ) : (
+              <AuthButtons />
+            )}
           </Grid>
         </Grid>
       </Grid>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const defaultContext = {
-  isAuthenticated: false,
+  isAuthenticated: true,
 };
 const Context = React.createContext(defaultContext);
 
