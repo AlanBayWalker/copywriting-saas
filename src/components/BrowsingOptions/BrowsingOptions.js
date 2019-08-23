@@ -29,7 +29,11 @@ const renderCategoryItems = () => {
   return items.map(item => (
     <Grid item key={item}>
       <Link to="/">
-        <Typography>{item}</Typography>
+        {item === 'All' ? (
+          <Typography color="#74b9ff">{item}</Typography>
+        ) : (
+          <Typography>{item}</Typography>
+        )}
       </Link>
     </Grid>
   ));

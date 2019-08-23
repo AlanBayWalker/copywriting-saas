@@ -85,7 +85,7 @@ const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
               </Link>
             </Grid>
             <Grid item>
-              <NavLink to="/explore">
+              <NavLink to="/">
                 <Typography color="light" gutter="0 .4rem">
                   EXPLORE
                 </Typography>

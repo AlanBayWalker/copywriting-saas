@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SelectedProject from '../SelectedProject/SelectedProject';
-import WorkspaceBrowser from '../WorkspaceBrowser/WorkspaceBrowser';
 import { WorkspaceSideMenu } from './styles';
 
 class ImageMapConfigurations extends Component {
@@ -41,7 +40,6 @@ class ImageMapConfigurations extends Component {
     };
     const allData = { workarea: { ...map.workarea, width: 900 } };
     onChange(selectedItem, change, allData);
-    console.log(selectedItem, change, allData, 'Makeshift');
   };
 
   urlHandler = () => {
@@ -58,11 +56,10 @@ class ImageMapConfigurations extends Component {
       },
     };
     onChange(selectedItem, change, allData);
-    console.log(selectedItem, change, allData, 'Makeshift');
   };
 
   render() {
-    const { onChange, selectedItem, canvasRef, path } = this.props;
+    const { onChange, selectedItem, canvasRef } = this.props;
 
     const map = {
       workarea: {
@@ -111,7 +108,6 @@ class ImageMapConfigurations extends Component {
         },
       };
       onChange(selectedItem, change, allData);
-      console.log(selectedItem, change, allData, 'Makeshift', files[0]);
     };
 
     const textHandler = () => {
@@ -121,12 +117,9 @@ class ImageMapConfigurations extends Component {
       onChange(selectedItem, change, styleValues);
     };
 
-    const pathHandler = (originalProject, cloneProject) =>
-      path.split('/')[2] === 'browse' ? cloneProject : originalProject;
-
     return (
       <WorkspaceSideMenu>
-        {pathHandler(<SelectedProject />, <WorkspaceBrowser path={path} />)}
+        <SelectedProject />
       </WorkspaceSideMenu>
     );
   }

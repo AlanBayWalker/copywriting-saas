@@ -609,7 +609,6 @@ class ImageMapEditor extends Component {
             canvasRef={this.canvasRef}
             onChange={onChange}
             selectedItem={selectedItem}
-            path={this.props.location.pathname}
           />
         </Grid>
       </Grid>
