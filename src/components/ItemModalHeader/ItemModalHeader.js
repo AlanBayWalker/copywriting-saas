@@ -5,15 +5,17 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import Typography from '../Typography/Typography';
 import { Container } from './styles';
 
-const ItemModalHeader = ({ title }) => (
+const ItemModalHeader = ({ title, author }) => (
   <Container container alignItems="center">
     <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column' }}>
       <Typography gutter="0 0" color="bold" variant="h6">
         {title}
       </Typography>
-      <Typography gutter="0 0" color="light" variant="caption">
-        Created By: AlanBayWalker
-      </Typography>
+      {author && (
+        <Typography gutter="0 0" color="light" variant="caption">
+          Completed By: {author}
+        </Typography>
+      )}
     </Grid>
     <Grid item xs={3}>
       <Button color="primary" variant="outlined" style={{ marginRight: '5px' }}>

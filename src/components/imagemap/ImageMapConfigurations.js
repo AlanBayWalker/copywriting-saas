@@ -46,7 +46,7 @@ class ImageMapConfigurations extends Component {
     const { selectedItem, onChange } = this.props;
     const change = {
       src:
-        'https://res.cloudinary.com/dzv9elyyj/image/upload/v1565814499/Copywriting%20Projects/AdWriter_zorl4d.jpg',
+        'https://res.cloudinary.com/dzv9elyyj/image/upload/v1566922944/Copywriting%20Projects/PenDraw_phhhpj.png',
     };
     const allData = {
       workarea: {

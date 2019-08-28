@@ -7,5 +7,5 @@ export const Container = styled(Grid)`
 `;
 
 export const SearchIcon = styled(Search)`
-  margin: 0 1rem -13px 0;
+  margin: 0 0 -14px 0;
 `;

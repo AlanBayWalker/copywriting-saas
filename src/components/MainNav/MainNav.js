@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Toolbar, Button, Menu, MenuItem } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { Container } from './styles';
+import store from 'store';
+import { Container, AccountCircleIcon, MenuButton } from './styles';
 import Typography from '../Typography/Typography';
 import Link from '../Link/Link';
 import NavLink from '../NavLink/NavLink';
@@ -19,37 +19,42 @@ const AuthButtons = () => (
       </Link>
     </Grid>
     <Grid item>
-      <Button color="secondary" variant="outlined">
-        Sign Up
-      </Button>
+      <Link to="/signup">
+        <Button color="secondary" variant="outlined">
+          Sign Up
+        </Button>
+      </Link>
     </Grid>
   </>
 );
 
-const UserMenu = ({ contextHandler }) => {
+const UserMenu = ({ clearContext }) => {
   const [menuState, setMenuState] = useState(null);
   const menuOpenHandler = ({ currentTarget }) => setMenuState(currentTarget);
   const menuCloseHandler = () => setMenuState(null);
   const logOutHandler = () => {
-    contextHandler({ isAuthenticated: false });
+    clearContext();
+    store.clearAll();
     menuCloseHandler();
   };
 
   return (
     <>
       <Grid item>
-        <Button
+        <MenuButton
           aria-controls="simple-menu"
           aria-haspopup="true"
           onClick={menuOpenHandler}
         >
-          <AccountCircleIcon style={{ fill: '#fff' }} />
-        </Button>
+          <AccountCircleIcon />
+        </MenuButton>
       </Grid>
       <Menu
         id="simple-menu"
         anchorEl={menuState}
-        keepMounted
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={Boolean(menuState)}
         onClose={menuCloseHandler}
       >
@@ -69,7 +74,7 @@ const UserMenu = ({ contextHandler }) => {
   );
 };
 
-const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
+const MainNav = ({ context: { isAuthenticated }, clearContext }) => (
   <Container position="static">
     <Toolbar>
       <Grid container justify="space-between" alignItems="center">
@@ -106,7 +111,7 @@ const MainNav = ({ context: { isAuthenticated }, contextHandler }) => (
               <SearchBar />
             </Grid>
             {isAuthenticated ? (
-              <UserMenu contextHandler={contextHandler} />
+              <UserMenu clearContext={clearContext} />
             ) : (
               <AuthButtons />
             )}

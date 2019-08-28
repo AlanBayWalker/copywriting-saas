@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Grid } from '@material-ui/core';
-import MainNav from '../MainNav/MainNav';
-import BrowseItem from '../BrowseItem/BrowseItem';
+import MainNav from '../../components/MainNav/MainNav';
+import BrowseItem from '../../components/BrowseItem/BrowseItem';
 import {
   HeaderContent,
   Header,
@@ -10,24 +10,25 @@ import {
   HireButton,
   ProjectsContainer,
 } from './styles';
-import Typography from '../Typography/Typography';
+import Typography from '../../components/Typography/Typography';
 import ProfileAvatarImage from '../../assets/profile-avatar.jpg';
 import projects from '../../utility/projects';
+import { withContext } from '../../utility/context';
 
-const UserProfile = ({ location: { pathname } }) => (
+const UserProfile = ({ location: { pathname }, context: { user } }) => (
   <>
     <MainNav />
     <Header>
       <EditProfileButton variant="outlined">Edit Profile</EditProfileButton>
       <HeaderContent>
         <Typography variant="h4" color="contrast" align="center">
-          Full Name
+          {user.name}
         </Typography>
         <Typography color="#cfcdcc" align="center">
-          @nickname
+          @{user.username}
         </Typography>
         <ProfileAvatar src={ProfileAvatarImage} alt="Profile" />
-        <Typography align="center">New Orleans, Louisiana</Typography>
+        <Typography align="center">{user.location}</Typography>
         <HireButton variant="contained" color="primary">
           Hire Me!
         </HireButton>
@@ -35,11 +36,7 @@ const UserProfile = ({ location: { pathname } }) => (
     </Header>
     <Container size="xs">
       <Typography color="light" align="center">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse.
+        {user.bio}
       </Typography>
       <ProjectsContainer justify="center" container spacing={3}>
         {projects.map(
@@ -55,4 +52,4 @@ const UserProfile = ({ location: { pathname } }) => (
   </>
 );
 
-export default UserProfile;
+export default withContext(UserProfile);

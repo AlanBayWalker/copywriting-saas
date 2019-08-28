@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import store from 'store';
 
 const defaultContext = {
-  isAuthenticated: false,
+  isAuthenticated: Boolean(store.get('token')),
 };
-const Context = React.createContext(defaultContext);
+export const Context = React.createContext(defaultContext);
 
 let contextHandler = () => null;
+let clearContext = () => null;
 
 export function withContext(Component) {
   return function WrapperComponent(props) {
@@ -16,6 +18,7 @@ export function withContext(Component) {
             {...props}
             context={state}
             contextHandler={contextHandler}
+            clearContext={clearContext}
           />
         )}
       </Context.Consumer>
@@ -31,6 +34,10 @@ export const Provider = ({ children }) => {
       ...change,
     }));
   };
+  clearContext = () => {
+    setContextValue(defaultContext);
+  };
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };
+
 export default Context;

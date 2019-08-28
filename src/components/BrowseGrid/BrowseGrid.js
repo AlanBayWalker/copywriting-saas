@@ -1,46 +1,29 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
 import _ from 'lodash';
+import { Grid } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import { Container } from './styles';
 import BrowseItem from '../BrowseItem/BrowseItem';
-import projects from '../../utility/projects';
 
-const projectsRender = path =>
-  projects.map(config => (
-    <Grid item xs={12} sm={6} md={4} lg={3} key={config.title}>
-      <BrowseItem path={path} {...config} />
+const projectsRender = items => {
+  if (items.length) {
+    return items.map(config => (
+      <Grid item xs={12} sm={6} md={4} lg={3} key={config.title}>
+        <BrowseItem {...config} />
+      </Grid>
+    ));
+  }
+  return _.times(8, (item, i) => (
+    <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
+      <Skeleton variant="rect" width={350} height={270} />
     </Grid>
   ));
-
-const projectCopyRender = path => {
-  const linkMatch = path.split('/')[2];
-  const [config] = projects.filter(({ link }) => link === linkMatch);
-  const result = [];
-  _.times(8, () => {
-    result.push(
-      <Grid item xs={3}>
-        <BrowseItem path={path} {...config} />
-      </Grid>
-    );
-  });
-  return result;
 };
 
-const BrowseGrid = ({ path }) => (
-  <Grid
-    container
-    justify="space-between"
-    spacing={8}
-    style={{
-      backgroundColor: '#f4f4f4',
-      margin: 0,
-      padding: '2rem 0',
-      maxWidth: '100%',
-    }}
-  >
-    {path.split('/').length < 3 || path.split('/')[1] === 'swipe-folder'
-      ? projectsRender(path)
-      : projectCopyRender(path)}
-  </Grid>
+const BrowseGrid = ({ items }) => (
+  <Container container justify="space-between" spacing={8}>
+    {projectsRender(items)}
+  </Container>
 );
 
 export default BrowseGrid;

@@ -13,15 +13,16 @@ import ItemModalHeader from '../ItemModalHeader/ItemModalHeader';
 const BrowseItemModal = ({
   dialogStatus,
   dialogCloseHandler,
-  path,
+  author,
   title,
   thumbnail,
   description,
   link,
   categories,
+  templateId,
 }) => {
   const pathHandler = (originalProject, cloneProject) =>
-    path.split('/')[2] === 'browse' ? cloneProject : originalProject;
+    author ? cloneProject : originalProject;
 
   return (
     <Dialog
@@ -29,23 +30,22 @@ const BrowseItemModal = ({
       onClose={dialogCloseHandler}
       aria-labelledby="form-dialog-title"
     >
-      <ItemModalHeader title={title} />
+      <ItemModalHeader title={title} author={author} />
       <DialogContent>
         <img
           src={thumbnail}
           alt={title}
           style={{ height: 'auto', marginBottom: '2rem', width: '100%' }}
         />
-        {categories &&
-          categories.map(name => (
-            <Chip
-              key={name}
-              color="primary"
-              label={name}
-              variant="outlined"
-              style={{ margin: '0 10px 2rem 0' }}
-            />
-          ))}
+        {categories.map(name => (
+          <Chip
+            key={name}
+            color="primary"
+            label={name}
+            variant="outlined"
+            style={{ margin: '0 10px 2rem 0' }}
+          />
+        ))}
         <DialogContentText>{description}</DialogContentText>
       </DialogContent>
       <DialogActions
@@ -54,12 +54,12 @@ const BrowseItemModal = ({
           padding: '0 1.4rem 1.2rem 1rem',
         }}
       >
-        <Link to={`/explore/${link}`} onClick={dialogCloseHandler}>
+        <Link to={`/explore/${templateId}`} onClick={dialogCloseHandler}>
           <Button color="primary" variant="outlined">
             {pathHandler('Browse Copies', 'Start Original')}
           </Button>
         </Link>
-        <Link to={`/workspace/${link}`}>
+        <Link to={`/workspace/${templateId}`}>
           <Button color="primary" variant="outlined">
             {pathHandler('Start', 'View')}
           </Button>
