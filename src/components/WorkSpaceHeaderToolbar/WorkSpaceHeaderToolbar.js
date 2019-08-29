@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
+import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 import uuid from 'uuid/v4';
 import {
   VerticalDivider,
@@ -238,6 +239,7 @@ class ImageMapItems extends Component {
         textAlign: {},
       };
       change.textAlign[direction] = true;
+      console.log(selectedItem, change, this.getTextValue(), 'handler');
       onChange(selectedItem, change, this.getTextValue());
     },
     opacityHandler: ({ target: { value } }) => {
@@ -450,6 +452,24 @@ class ImageMapItems extends Component {
           {item.name}
         </span>
         {renderItems(fontFormatItems)}
+        <ToggleButtonGroup
+          value={selectedItem && selectedItem.textAlign}
+          exclusive
+          onChange={this.textHandlers.textAlignHandler}
+        >
+          <ToggleButton value="left">
+            <FormatAlignLeftIcon />
+          </ToggleButton>
+          <ToggleButton value="center">
+            <FormatAlignCenterIcon />
+          </ToggleButton>
+          <ToggleButton value="right">
+            <FormatAlignRightIcon />
+          </ToggleButton>
+          <ToggleButton value="justify">
+            <FormatAlignJustifyIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
 
         <VerticalDivider />
 
@@ -491,6 +511,7 @@ class ImageMapItems extends Component {
           <ColorPicker
             button={<FormatColorTextIcon />}
             onChangeComplete={this.textHandlers.fontColorHandler}
+            color={selectedItem && selectedItem.fill}
           />
         </Tooltip>
 

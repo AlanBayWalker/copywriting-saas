@@ -13,7 +13,7 @@ const projectsRender = items => {
       </Grid>
     ));
   }
-  return _.times(8, (item, i) => (
+  return _.times(8, i => (
     <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
       <Skeleton variant="rect" width={350} height={270} />
     </Grid>

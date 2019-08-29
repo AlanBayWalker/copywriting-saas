@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
 import { ResizeSensor } from 'css-element-queries';
 import CloseIcon from '@material-ui/icons/Close';
-import Canvas from '../canvas/Canvas';
+import Canvas from '../Canvas/Canvas';
 
 class ImageMapPreview extends Component {
   static propTypes = {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ResizeSensor } from 'css-element-queries';
 import debounce from 'lodash/debounce';
 import { Grid } from '@material-ui/core';
-import Canvas from '../../components/canvas/Canvas';
+import Canvas from '../../components/Canvas/Canvas';
 import WorkSpaceFooterToolbar from '../../components/WorkSpaceFooterToolbar/WorkSpaceFooterToolbar';
 import WorkSpaceHeaderToolbar from '../../components/WorkSpaceHeaderToolbar/WorkSpaceHeaderToolbar';
 import WorkSpacePreview from '../../components/WorkSpacePreview/WorkSpacePreview';
@@ -354,7 +354,7 @@ class ImageMapEditor extends Component {
         return;
       }
       if (changedKey === 'textAlign') {
-        console.log(Object.keys(changedValue), 'keys');
+        console.log(changedKey, Object.keys(changedValue)[0], 'keys');
         this.canvasRef.handlers.set(changedKey, Object.keys(changedValue)[0]);
         return;
       }
