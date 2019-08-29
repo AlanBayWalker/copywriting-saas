@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import store from 'store';
 
-const defaultContext = {
-  isAuthenticated: Boolean(store.get('token')),
-};
-export const Context = React.createContext(defaultContext);
+export const Context = React.createContext({});
 
 let contextHandler = () => null;
 let clearContext = () => null;
@@ -27,15 +24,24 @@ export function withContext(Component) {
 }
 
 export const Provider = ({ children }) => {
-  const [contextValue, setContextValue] = useState(defaultContext);
+  const initialContext = {
+    token: '',
+    user: {},
+  };
+  const newContext = store.get('app') || initialContext;
+  const [contextValue, setContextValue] = useState(newContext);
   contextHandler = change => {
-    setContextValue(prevState => ({
-      ...prevState,
-      ...change,
-    }));
+    setContextValue(prevState => {
+      const updatedContext = {
+        ...prevState,
+        ...change,
+      };
+      store.set('app', updatedContext);
+      return updatedContext;
+    });
   };
   clearContext = () => {
-    setContextValue(defaultContext);
+    setContextValue(initialContext);
   };
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };

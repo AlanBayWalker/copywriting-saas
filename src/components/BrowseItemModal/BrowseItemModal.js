@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import Link from '../Link/Link';
 import ItemModalHeader from '../ItemModalHeader/ItemModalHeader';
+import { withContext } from '../../utility/context';
 
 const BrowseItemModal = ({
   dialogStatus,
@@ -17,12 +18,19 @@ const BrowseItemModal = ({
   title,
   thumbnail,
   description,
-  link,
   categories,
   templateId,
+  projectId,
+  context: { user },
 }) => {
   const pathHandler = (originalProject, cloneProject) =>
-    author ? cloneProject : originalProject;
+    projectId ? cloneProject : originalProject;
+  const hasProject = () => {
+    const res =
+      user.projects &&
+      user.projects.filter(project => project.templateId === templateId);
+    return res && res.length > 0 ? 'Continue' : 'Start';
+  };
 
   return (
     <Dialog
@@ -54,19 +62,63 @@ const BrowseItemModal = ({
           padding: '0 1.4rem 1.2rem 1rem',
         }}
       >
-        <Link to={`/explore/${templateId}`} onClick={dialogCloseHandler}>
-          <Button color="primary" variant="outlined">
-            {pathHandler('Browse Copies', 'Start Original')}
-          </Button>
-        </Link>
-        <Link to={`/workspace/${templateId}`}>
-          <Button color="primary" variant="outlined">
-            {pathHandler('Start', 'View')}
-          </Button>
-        </Link>
+        {pathHandler(
+          <Link
+            to={{
+              pathname: `/explore/${projectId || templateId}`,
+              state: {
+                type: projectId ? 'projectId' : 'templateId',
+              },
+            }}
+            onClick={dialogCloseHandler}
+          >
+            <Button color="primary" variant="outlined">
+              Browse Copies
+            </Button>
+          </Link>,
+          <Link
+            to={{
+              pathname: `/workspace/${templateId}`,
+              state: {
+                type: 'templateId',
+              },
+            }}
+            onClick={dialogCloseHandler}
+          >
+            <Button color="primary" variant="outlined">
+              {hasProject()} Project
+            </Button>
+          </Link>
+        )}
+        {pathHandler(
+          <Link
+            to={{
+              pathname: `/workspace/${projectId || templateId}`,
+              state: {
+                type: projectId ? 'projectId' : 'templateId',
+              },
+            }}
+          >
+            <Button color="primary" variant="outlined">
+              {hasProject()} Project
+            </Button>
+          </Link>,
+          <Link
+            to={{
+              pathname: `/workspace/${projectId}`,
+              state: {
+                type: 'projectId',
+              },
+            }}
+          >
+            <Button color="primary" variant="outlined">
+              View
+            </Button>
+          </Link>
+        )}
       </DialogActions>
     </Dialog>
   );
 };
 
-export default BrowseItemModal;
+export default withContext(BrowseItemModal);

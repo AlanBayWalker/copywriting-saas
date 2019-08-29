@@ -13,23 +13,6 @@ import FormatAlignLeft from '@material-ui/icons/FormatAlignLeft';
 import FormatAlignRight from '@material-ui/icons/FormatAlignRight';
 import FormatColorText from '@material-ui/icons/FormatColorText';
 
-export const WorkspaceSideMenu = styled.div`
-  border-left: gray solid 4px;
-  height: 100vh;
-  /* padding: 2rem; */
-`;
-
-export const FooterToolbarContainer = styled.div`
-  background-color: #fff;
-  border-radius: 15px;
-  bottom: 50px;
-  margin: 0;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5000;
-`;
-
 export const VerticalDivider = styled.span`
   position: relative;
   :after {

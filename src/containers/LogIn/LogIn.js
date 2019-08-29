@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   Container,
@@ -8,30 +8,36 @@ import {
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
-import store from 'store';
 import { Formik, Form, Field } from 'formik';
 import axios from '../../utility/axios';
 import { FormContainer } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
 
-const LogIn = ({ contextHandler, context: { isAuthenticated } }) => {
+const LogIn = ({ contextHandler, context: { token } }) => {
+  const [errorState, setErrorState] = useState('');
   const loginHandler = async (data, { setSubmitting }) => {
     setSubmitting(true);
-    const token = await axios({
+    const tokenResponse = await axios({
       method: 'post',
       endPoint: '/login',
       data,
     });
 
-    if (token !== null) {
-      store.set('token', token.token);
+    if (tokenResponse.status >= 200 && tokenResponse.status <= 299) {
+      contextHandler({ token: tokenResponse.data.token });
       const user = await axios({
         method: 'get',
         endPoint: '/user',
         token: true,
       });
-      contextHandler({ isAuthenticated: true, user: user.credentials });
+
+      if (user.status >= 200 && user.status <= 299) {
+        contextHandler({ user: user.data });
+      }
+    } else {
+      setSubmitting(false);
+      setErrorState(tokenResponse.data.general);
     }
   };
 
@@ -45,7 +51,7 @@ const LogIn = ({ contextHandler, context: { isAuthenticated } }) => {
     return errors;
   };
 
-  if (isAuthenticated) return <Redirect to="/" />;
+  if (token) return <Redirect to="/" />;
 
   return (
     <Container maxWidth="sm">
@@ -112,6 +118,11 @@ const LogIn = ({ contextHandler, context: { isAuthenticated } }) => {
                   />
                 )}
               />
+              {errorState && (
+                <Typography color="#ff0000" variant="subtitle">
+                  {errorState}
+                </Typography>
+              )}
               <Typography color="light" align="right">
                 Forgot your Password?
               </Typography>

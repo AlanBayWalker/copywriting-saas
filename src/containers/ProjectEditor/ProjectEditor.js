@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { ResizeSensor } from 'css-element-queries';
 import debounce from 'lodash/debounce';
 import { Grid } from '@material-ui/core';
-import Canvas from '../canvas/Canvas';
-import ImageMapFooterToolbar from './ImageMapFooterToolbar';
-import ImageMapItems from './ImageMapItems';
-import ImageMapPreview from './ImageMapPreview';
-import ImageMapConfigurations from './ImageMapConfigurations';
+import Canvas from '../../components/canvas/Canvas';
+import WorkSpaceFooterToolbar from '../../components/WorkSpaceFooterToolbar/WorkSpaceFooterToolbar';
+import WorkSpaceHeaderToolbar from '../../components/WorkSpaceHeaderToolbar/WorkSpaceHeaderToolbar';
+import WorkSpacePreview from '../../components/WorkSpacePreview/WorkSpacePreview';
+import WorkSpace from '../../components/WorkSpace/WorkSpace';
+import { withContext } from '../../utility/context';
+import axios from '../../utility/axios';
 
 const propertiesToInclude = [
   'id',
@@ -87,7 +89,8 @@ class ImageMapEditor extends Component {
     uploadDialog: false,
   };
 
-  componentDidMount() {
+  /* eslint-disable */
+  async componentDidMount() {
     this.resizeSensor = new ResizeSensor(this.container, () => {
       const { canvasRect: currentCanvasRect } = this.state;
       const canvasRect = Object.assign({}, currentCanvasRect, {
@@ -107,12 +110,70 @@ class ImageMapEditor extends Component {
     });
 
     if (this.props.location.pathname.split('/').length > 2) {
-      const { objects } = require(`../../projects/${
-        this.props.location.pathname.split('/')[2]
-      }.json`);
-      this.canvasRef.handlers.importJSON(JSON.stringify(objects));
+      const {
+        context: {
+          user
+        },
+        location: {
+          state: { type },
+        },
+        match: {
+          params: { id },
+        },
+        contextHandler
+      } = this.props;
+
+      if (type === 'templateId') {
+        const completedProjects = user.projects.filter(
+          ({ templateId }) => templateId === id
+        );
+        if (completedProjects.length === 0) {
+          // call createProject api
+          console.log('Created new project');
+          const project = await axios({
+            method: 'post',
+            endPoint: '/project',
+            data: {
+              templateId: id
+            },
+            token: true,
+          });
+          if (project.status >= 200 && project.status <= 299) {
+            const newUser = {
+              ...user,
+              projects: [...user.projects, project.data]
+            };
+            this.canvasRef.handlers.importJSON(JSON.stringify(project.data.source.objects));
+            contextHandler({ user: newUser });
+          }
+        } else if (completedProjects.length > 0) {
+          // continue this project
+          console.log('Continued previous project');
+          this.canvasRef.handlers.importJSON(
+            JSON.stringify(completedProjects[0].source.objects)
+          );
+        }
+      } else if (type === 'projectId') {
+        // call fetchProject
+        console.log('Fetched project');
+        const [item] = user.projects.filter(({ projectId }) => projectId === id);
+        if (item) {
+          this.canvasRef.handlers.importJSON(JSON.stringify(item.source.objects));
+        } else {
+          const project = await axios({
+            method: 'get',
+            endPoint: `/project/${id}`,
+            token: true,
+          });
+          if (project.status >= 200 && project.status <= 299) {
+            this.canvasRef.handlers.importJSON(JSON.stringify(project.data.source.objects));
+          }
+        }
+      }
     }
   }
+
+  /* eslint-enable */
 
   canvasHandlers = {
     onAdd: target => {
@@ -547,7 +608,7 @@ class ImageMapEditor extends Component {
     return (
       <Grid container>
         <Grid item md={9} style={{ height: '95.5vh' }}>
-          <ImageMapItems
+          <WorkSpaceHeaderToolbar
             ref={c => {
               this.itemsRef = c;
             }}
@@ -587,13 +648,13 @@ class ImageMapEditor extends Component {
               onLink={onLink}
               onContext={onContext}
             />
-            <ImageMapFooterToolbar
+            <WorkSpaceFooterToolbar
               canvasRef={this.canvasRef}
               preview={preview}
               onChangePreview={onChangePreview}
               zoomRatio={zoomRatio}
             />
-            <ImageMapPreview
+            <WorkSpacePreview
               ref={c => {
                 this.preview = c;
               }}
@@ -605,7 +666,7 @@ class ImageMapEditor extends Component {
           </div>
         </Grid>
         <Grid item md={3}>
-          <ImageMapConfigurations
+          <WorkSpace
             canvasRef={this.canvasRef}
             onChange={onChange}
             selectedItem={selectedItem}
@@ -616,4 +677,4 @@ class ImageMapEditor extends Component {
   }
 }
 
-export default ImageMapEditor;
+export default withContext(ImageMapEditor);

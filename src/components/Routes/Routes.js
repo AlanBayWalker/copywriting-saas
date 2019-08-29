@@ -4,7 +4,7 @@ import history from '../../utility/history';
 import SignUp from '../../containers/SignUp/SignUp';
 import ExploreProjects from '../../containers/ExploreProjects/ExploreProjects';
 import UserProfile from '../../containers/UserProfile/UserProfile';
-import ImageMapEditor from '../imagemap/ImageMapEditor';
+import ImageMapEditor from '../../containers/ProjectEditor/ProjectEditor';
 import LogIn from '../../containers/LogIn/LogIn';
 import SwipeFolder from '../SwipeFolder/SwipeFolder';
 import SelectedSwipeFolder from '../SelectedSwipeFolder/SelectedSwipeFolder';
@@ -14,7 +14,7 @@ const PrivateRoute = withContext(({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      rest.context.isAuthenticated ? (
+      rest.context.token ? (
         <Component {...props} />
       ) : (
         <Redirect
@@ -40,7 +40,7 @@ const Routes = () => (
       path="/swipe-folder/:id"
       component={SelectedSwipeFolder}
     />
-    <PrivateRoute path="/workspace" component={ImageMapEditor} />
+    <PrivateRoute path="/workspace/:id" component={ImageMapEditor} />
     <PrivateRoute exact path="/profile" component={UserProfile} />
   </Router>
 );

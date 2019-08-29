@@ -11,7 +11,6 @@ import {
   ProjectsContainer,
 } from './styles';
 import Typography from '../../components/Typography/Typography';
-import ProfileAvatarImage from '../../assets/profile-avatar.jpg';
 import projects from '../../utility/projects';
 import { withContext } from '../../utility/context';
 
@@ -22,13 +21,13 @@ const UserProfile = ({ location: { pathname }, context: { user } }) => (
       <EditProfileButton variant="outlined">Edit Profile</EditProfileButton>
       <HeaderContent>
         <Typography variant="h4" color="contrast" align="center">
-          {user.name}
+          {user.credentials.name}
         </Typography>
         <Typography color="#cfcdcc" align="center">
-          @{user.username}
+          @{user.credentials.username}
         </Typography>
-        <ProfileAvatar src={ProfileAvatarImage} alt="Profile" />
-        <Typography align="center">{user.location}</Typography>
+        <ProfileAvatar src={user.credentials.imageUrl} alt="Profile" />
+        <Typography align="center">{user.credentials.location}</Typography>
         <HireButton variant="contained" color="primary">
           Hire Me!
         </HireButton>
@@ -36,7 +35,7 @@ const UserProfile = ({ location: { pathname }, context: { user } }) => (
     </Header>
     <Container size="xs">
       <Typography color="light" align="center">
-        {user.bio}
+        {user.credentials.bio}
       </Typography>
       <ProjectsContainer justify="center" container spacing={3}>
         {projects.map(

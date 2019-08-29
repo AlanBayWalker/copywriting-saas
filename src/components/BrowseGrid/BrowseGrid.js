@@ -6,7 +6,7 @@ import { Container } from './styles';
 import BrowseItem from '../BrowseItem/BrowseItem';
 
 const projectsRender = items => {
-  if (items.length) {
+  if (items && items.length) {
     return items.map(config => (
       <Grid item xs={12} sm={6} md={4} lg={3} key={config.title}>
         <BrowseItem {...config} />

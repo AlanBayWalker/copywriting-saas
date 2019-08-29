@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   Container,
@@ -12,7 +12,6 @@ import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
-import store from 'store';
 import { Formik, Form, Field } from 'formik';
 import Link from '../../components/Link/Link';
 import axios from '../../utility/axios';
@@ -20,23 +19,30 @@ import { FormContainer } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
 
-const SignUp = ({ contextHandler, context: { isAuthenticated } }) => {
+const SignUp = ({ contextHandler, context: { token } }) => {
+  const [errorState, setErrorState] = useState('');
   const signupHandler = async (data, { setSubmitting }) => {
     setSubmitting(true);
-    const token = await axios({
+    const tokenResponse = await axios({
       method: 'post',
       endPoint: '/signup',
       data,
     });
 
-    if (token !== null) {
-      store.set('token', token.token);
+    if (tokenResponse.status >= 200 && tokenResponse.status <= 299) {
+      contextHandler({ token: tokenResponse.data.token });
       const user = await axios({
         method: 'get',
         endPoint: '/user',
         token: true,
       });
-      contextHandler({ isAuthenticated: true, user: user.credentials });
+
+      if (user.status >= 200 && user.status <= 299) {
+        contextHandler({ user: user.data });
+      }
+    } else {
+      setSubmitting(false);
+      setErrorState(tokenResponse.data.general);
     }
   };
 
@@ -84,7 +90,7 @@ const SignUp = ({ contextHandler, context: { isAuthenticated } }) => {
     bio: '',
   };
 
-  if (isAuthenticated) return <Redirect to="/" />;
+  if (token) return <Redirect to="/" />;
 
   return (
     <Container maxWidth="sm">
@@ -268,6 +274,11 @@ const SignUp = ({ contextHandler, context: { isAuthenticated } }) => {
                   />
                 </Grid>
               </Grid>
+              {errorState && (
+                <Typography color="#ff0000" variant="subtitle">
+                  {errorState}
+                </Typography>
+              )}
               <Link to="/login">
                 <Typography color="light" align="right">
                   Already have an account?

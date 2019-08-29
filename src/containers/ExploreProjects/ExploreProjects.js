@@ -5,12 +5,13 @@ import BrowseGrid from '../../components/BrowseGrid/BrowseGrid';
 import axios from '../../utility/axios';
 
 const fetch = async (setItems, templateId) => {
-  const templates = await axios({
+  const items = await axios({
     method: 'get',
     endPoint: `/${templateId ? 'projects' : 'templates'}`,
-    token: true,
   });
-  setItems(templates);
+  if (items.status >= 200 && items.status <= 299) {
+    setItems(items.data);
+  }
 };
 
 const ExploreProjects = ({
@@ -24,11 +25,11 @@ const ExploreProjects = ({
   }, [templateId]);
 
   return (
-    <div>
+    <>
       <MainNav />
       <BrowsingOptions />
       <BrowseGrid items={items} />
-    </div>
+    </>
   );
 };
 

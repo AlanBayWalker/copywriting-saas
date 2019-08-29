@@ -33,8 +33,8 @@ const UserMenu = ({ clearContext }) => {
   const menuOpenHandler = ({ currentTarget }) => setMenuState(currentTarget);
   const menuCloseHandler = () => setMenuState(null);
   const logOutHandler = () => {
-    clearContext();
     store.clearAll();
+    clearContext();
     menuCloseHandler();
   };
 
@@ -74,7 +74,7 @@ const UserMenu = ({ clearContext }) => {
   );
 };
 
-const MainNav = ({ context: { isAuthenticated }, clearContext }) => (
+const MainNav = ({ context: { token }, clearContext }) => (
   <Container position="static">
     <Toolbar>
       <Grid container justify="space-between" alignItems="center">
@@ -110,11 +110,7 @@ const MainNav = ({ context: { isAuthenticated }, clearContext }) => (
             <Grid item>
               <SearchBar />
             </Grid>
-            {isAuthenticated ? (
-              <UserMenu clearContext={clearContext} />
-            ) : (
-              <AuthButtons />
-            )}
+            {token ? <UserMenu clearContext={clearContext} /> : <AuthButtons />}
           </Grid>
         </Grid>
       </Grid>
