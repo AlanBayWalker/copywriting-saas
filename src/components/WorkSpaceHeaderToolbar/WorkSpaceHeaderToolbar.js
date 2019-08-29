@@ -233,13 +233,9 @@ class ImageMapItems extends Component {
       const change = { underline: !selectedItem.underline };
       onChange(selectedItem, change, this.getTextValue());
     },
-    textAlignHandler: direction => () => {
+    textAlignHandler: (e, direction) => {
       const { onChange, selectedItem } = this.props;
-      const change = {
-        textAlign: {},
-      };
-      change.textAlign[direction] = true;
-      console.log(selectedItem, change, this.getTextValue(), 'handler');
+      const change = { textAlign: direction };
       onChange(selectedItem, change, this.getTextValue());
     },
     opacityHandler: ({ target: { value } }) => {
@@ -367,45 +363,6 @@ class ImageMapItems extends Component {
       },
     };
 
-    const alignFontItems = {
-      alignCenter: {
-        title: 'Align Center',
-        onClick: this.textHandlers.textAlignHandler('center'),
-        Icon: FormatAlignCenterIcon,
-        active: {
-          property: 'textAlign',
-          value: 'center',
-        },
-      },
-      alignJustify: {
-        title: 'Align Justify',
-        onClick: this.textHandlers.textAlignHandler('justify'),
-        Icon: FormatAlignJustifyIcon,
-        active: {
-          property: 'textAlign',
-          value: 'justify',
-        },
-      },
-      alignLeft: {
-        title: 'Align Left',
-        onClick: this.textHandlers.textAlignHandler('left'),
-        Icon: FormatAlignLeftIcon,
-        active: {
-          property: 'textAlign',
-          value: 'left',
-        },
-      },
-      alignRight: {
-        title: 'Align Right',
-        onClick: this.textHandlers.textAlignHandler('right'),
-        Icon: FormatAlignRightIcon,
-        active: {
-          property: 'textAlign',
-          value: 'right',
-        },
-      },
-    };
-
     const renderItems = items => {
       const res = [];
 
@@ -470,12 +427,6 @@ class ImageMapItems extends Component {
             <FormatAlignJustifyIcon />
           </ToggleButton>
         </ToggleButtonGroup>
-
-        <VerticalDivider />
-
-        {renderItems(alignFontItems)}
-
-        <VerticalDivider />
 
         <Tooltip title="Font Size">
           <Select

@@ -354,8 +354,7 @@ class ImageMapEditor extends Component {
         return;
       }
       if (changedKey === 'textAlign') {
-        console.log(changedKey, Object.keys(changedValue)[0], 'keys');
-        this.canvasRef.handlers.set(changedKey, Object.keys(changedValue)[0]);
+        this.canvasRef.handlers.set(changedKey, changedValue);
         return;
       }
       if (changedKey === 'trigger') {
