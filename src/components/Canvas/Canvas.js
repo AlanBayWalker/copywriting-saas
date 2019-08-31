@@ -978,6 +978,7 @@ class Canvas extends Component {
          * @returns {fabric.Object}
          */
         setByPartial: (object, option) => {
+            console.log('setByPartial');
             if (!object) {
                 return;
             }
@@ -1403,6 +1404,7 @@ class Canvas extends Component {
             }
         },
         saveCanvasImage: (option = { name: 'New Image', format: 'png', quality: 1 }) => {
+            console.log('Image Saved');
             const dataUrl = this.canvas.toDataURL(option);
             if (dataUrl) {
                 const anchorEl = document.createElement('a');

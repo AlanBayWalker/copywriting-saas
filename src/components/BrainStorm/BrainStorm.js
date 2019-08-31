@@ -1,64 +1,46 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
+import _ from 'lodash';
+import { withContext } from '../../utility/context';
 
-const BrainStorm = () => (
-  <>
-    <TextField
-      id="standard-multiline-flexible"
-      label="Who is the target audience?"
-      multiline
-      rows="7"
-      rowsMax="10"
-      value=""
-      onChange={() => null}
-      margin="normal"
-      fullWidth
-    />
-    <TextField
-      id="standard-multiline-flexible"
-      label="What makes this special?"
-      multiline
-      rows="7"
-      rowsMax="10"
-      value=""
-      onChange={() => null}
-      margin="normal"
-      fullWidth
-    />
-    <TextField
-      id="standard-multiline-flexible"
-      label="What are some negative qualities about it?"
-      multiline
-      rows="7"
-      rowsMax="10"
-      value=""
-      onChange={() => null}
-      margin="normal"
-      fullWidth
-    />
-    <TextField
-      id="standard-multiline-flexible"
-      label="What painpoint is this product solving?"
-      multiline
-      rows="7"
-      rowsMax="10"
-      value=""
-      onChange={() => null}
-      margin="normal"
-      fullWidth
-    />
-    <TextField
-      id="standard-multiline-flexible"
-      label="What's the sales offer here?"
-      multiline
-      rows="4"
-      rowsMax="10"
-      value=""
-      onChange={() => null}
-      margin="normal"
-      fullWidth
-    />
-  </>
-);
+const BrainStorm = ({ context, contextHandler, projectId }) => {
+  const [project] = context.user.projects.filter(
+    ({ projectId: filteredProjectId }) => filteredProjectId === projectId
+  );
 
-export default BrainStorm;
+  const workspaceHandler = (questionTitle, questionBody, index) => ({
+    target: { value },
+  }) => {
+    const newUser = {
+      ...context.user,
+    };
+    const projectIndex = _.findIndex(newUser.projects, project);
+
+    newUser.projects[projectIndex].workSpace.splice(index, 1, {
+      questionTitle,
+      questionBody: value,
+    });
+    contextHandler({ user: newUser });
+  };
+
+  return (
+    <>
+      {project.workSpace.map(({ questionTitle, questionBody }, index) => (
+        <TextField
+          id="standard-multiline-flexible"
+          label={questionTitle}
+          multiline
+          rows="7"
+          rowsMax="10"
+          value={questionBody}
+          onChange={workspaceHandler(questionTitle, questionBody, index)}
+          margin="normal"
+          fullWidth
+          key={questionTitle}
+        />
+      ))}
+    </>
+  );
+};
+
+export default withContext(BrainStorm);

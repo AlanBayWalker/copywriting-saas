@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import MainNav from '../../components/MainNav/MainNav';
 import BrowsingOptions from '../../components/BrowsingOptions/BrowsingOptions';
 import BrowseGrid from '../../components/BrowseGrid/BrowseGrid';
-import axios from '../../utility/axios';
 
 const fetch = async (setItems, templateId) => {
-  const items = await axios({
-    method: 'get',
-    endPoint: `/${templateId ? 'projects' : 'templates'}`,
-  });
+  const items = await axios.get(`/${templateId ? 'projects' : 'templates'}`);
   if (items.status >= 200 && items.status <= 299) {
     setItems(items.data);
   }

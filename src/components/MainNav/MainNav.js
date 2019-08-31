@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Toolbar, Button, Menu, MenuItem } from '@material-ui/core';
 import store from 'store';
-import { Container, AccountCircleIcon, MenuButton } from './styles';
+import { Container, AccountCircleIcon, ArrowDropDownIcon } from './styles';
 import Typography from '../Typography/Typography';
 import Link from '../Link/Link';
 import NavLink from '../NavLink/NavLink';
@@ -28,7 +28,7 @@ const AuthButtons = () => (
   </>
 );
 
-const UserMenu = ({ clearContext }) => {
+const UserMenu = ({ clearContext, username }) => {
   const [menuState, setMenuState] = useState(null);
   const menuOpenHandler = ({ currentTarget }) => setMenuState(currentTarget);
   const menuCloseHandler = () => setMenuState(null);
@@ -41,13 +41,14 @@ const UserMenu = ({ clearContext }) => {
   return (
     <>
       <Grid item>
-        <MenuButton
+        <Button
           aria-controls="simple-menu"
           aria-haspopup="true"
           onClick={menuOpenHandler}
         >
           <AccountCircleIcon />
-        </MenuButton>
+          <ArrowDropDownIcon />
+        </Button>
       </Grid>
       <Menu
         id="simple-menu"
@@ -58,7 +59,7 @@ const UserMenu = ({ clearContext }) => {
         open={Boolean(menuState)}
         onClose={menuCloseHandler}
       >
-        <Link to="/profile">
+        <Link to={`/profile/${username}`}>
           <MenuItem onClick={menuCloseHandler}>Profile</MenuItem>
         </Link>
 
@@ -74,7 +75,15 @@ const UserMenu = ({ clearContext }) => {
   );
 };
 
-const MainNav = ({ context: { token }, clearContext }) => (
+const MainNav = ({
+  context: {
+    token,
+    user: {
+      credentials: { username },
+    },
+  },
+  clearContext,
+}) => (
   <Container position="static">
     <Toolbar>
       <Grid container justify="space-between" alignItems="center">
@@ -110,7 +119,11 @@ const MainNav = ({ context: { token }, clearContext }) => (
             <Grid item>
               <SearchBar />
             </Grid>
-            {token ? <UserMenu clearContext={clearContext} /> : <AuthButtons />}
+            {token ? (
+              <UserMenu clearContext={clearContext} username={username} />
+            ) : (
+              <AuthButtons />
+            )}
           </Grid>
         </Grid>
       </Grid>

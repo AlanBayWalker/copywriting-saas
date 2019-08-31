@@ -41,7 +41,7 @@ const Routes = () => (
       component={SelectedSwipeFolder}
     />
     <PrivateRoute path="/workspace/:id" component={ImageMapEditor} />
-    <PrivateRoute exact path="/profile" component={UserProfile} />
+    <PrivateRoute exact path="/profile/:username" component={UserProfile} />
   </Router>
 );
 

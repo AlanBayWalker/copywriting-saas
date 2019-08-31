@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Avatar } from '@material-ui/core';
 import ProfileBackground from '../../assets/profile-background.png';
 
 export const Header = styled.header`
@@ -40,4 +40,14 @@ export const HireButton = styled(Button)`
 
 export const ProjectsContainer = styled(Grid)`
   margin: 2rem 0;
+`;
+
+export const EditorAvatar = styled(Avatar)`
+  height: 60px;
+  width: 60px;
+`;
+
+export const HiddenInput = styled.input`
+  height: 60px;
+  width: 60px;
 `;

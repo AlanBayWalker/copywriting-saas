@@ -205,6 +205,52 @@ class ImageMapItems extends Component {
     colorPickerMenuCloseHandler: () => {
       this.setState(() => ({ colorPickerMenu: null }));
     },
+    // textFormatHandler: (e, value) => {
+    //   const { selectedItem, onChange } = this.props;
+    //   const change = {
+    //     fontWeight: false,
+    //     fontStyle: false,
+    //     underline: false,
+    //     linethrough: false,
+    //   };
+
+    //   value.forEach(format => {
+    //     switch (format) {
+    //       case 'bold':
+    //         change.fontWeight = true;
+    //         break;
+    //       case 'italic':
+    //         change.fontStyle = true;
+    //         break;
+    //       case 'underline':
+    //         change.underline = true;
+    //         break;
+    //       case 'linethrough':
+    //         change.linethrough = true;
+    //         break;
+    //       default:
+    //         return null;
+    //     }
+    //   });
+    //   onChange(selectedItem, change, this.getTextValue());
+    // },
+    textFormatValue: () => {
+      const { selectedItem } = this.props;
+      const result = [];
+      if (selectedItem && selectedItem.fontWeight === 'bold') {
+        result.push('bold');
+      }
+      if (selectedItem && selectedItem.fontStyle === 'italic') {
+        result.push('italic');
+      }
+      if (selectedItem && selectedItem.linethrough) {
+        result.push('linethrough');
+      }
+      if (selectedItem && selectedItem.underline) {
+        result.push('underline');
+      }
+      return result;
+    },
   };
 
   textHandlers = {
@@ -329,57 +375,36 @@ class ImageMapItems extends Component {
         title: 'bold',
         onClick: this.textHandlers.fontWeightHandler,
         Icon: FormatBoldIcon,
-        active: {
-          property: 'fontWeight',
-          value: 'bold',
-        },
+        value: 'bold',
       },
       italic: {
         title: 'italic',
         onClick: this.textHandlers.fontStyleHandler,
         Icon: FormatItalicIcon,
-        active: {
-          property: 'fontStyle',
-          value: 'italic',
-        },
+        value: 'italic',
       },
       linethrough: {
         title: 'Linethrough',
         onClick: this.textHandlers.lineThroughHandler,
         Icon: FormatStrikethroughIcon,
-        active: {
-          property: 'linethrough',
-          value: true,
-        },
+        value: 'linethrough',
       },
       underline: {
         title: 'Underline',
         onClick: this.textHandlers.underlineHandler,
         Icon: FormatUnderlinedIcon,
-        active: {
-          property: 'underline',
-          value: true,
-        },
+        value: 'underline',
       },
     };
 
     const renderItems = items => {
       const res = [];
 
-      _.map(items, ({ title, onClick, Icon, active }) => {
+      _.map(items, ({ title, onClick, Icon, value }) => {
         res.push(
-          <Tooltip title={title} key={title}>
-            <FormatButton
-              onClick={onClick}
-              active={
-                this.getTextValue()[active.property] === active.value
-                  ? true
-                  : undefined
-              }
-            >
-              <Icon className="font-format-icon" />
-            </FormatButton>
-          </Tooltip>
+          <ToggleButton onClick={onClick} value={value}>
+            <Icon className="font-format-icon" />
+          </ToggleButton>
         );
       });
       return res;
@@ -408,11 +433,18 @@ class ImageMapItems extends Component {
         >
           {item.name}
         </span>
-        {renderItems(fontFormatItems)}
+
+        <ToggleButtonGroup
+          value={this.materialUI.textFormatValue()}
+          // onChange={this.materialUI.textFormatHandler}
+        >
+          {renderItems(fontFormatItems)}
+        </ToggleButtonGroup>
+
         <ToggleButtonGroup
           value={selectedItem && selectedItem.textAlign}
-          exclusive
           onChange={this.textHandlers.textAlignHandler}
+          exclusive
         >
           <ToggleButton value="left">
             <FormatAlignLeftIcon />

@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { SketchPicker } from 'react-color';
 
-/* eslint-disable */
+/* eslint-disable react/display-name  */
 const MenuListComposition = React.forwardRef(
   ({ button, onChangeComplete, color }, ref) => {
     const [open, setOpen] = React.useState(false);
@@ -44,7 +44,10 @@ const MenuListComposition = React.forwardRef(
             >
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
-                  <SketchPicker onChange={onChangeComplete} color={color || '#000'} />
+                  <SketchPicker
+                    onChange={onChangeComplete}
+                    color={color || '#000'}
+                  />
                 </ClickAwayListener>
               </Paper>
             </Grow>
@@ -54,6 +57,6 @@ const MenuListComposition = React.forwardRef(
     );
   }
 );
-/* eslint-enable */
+/* eslint-enable react/display-name */
 
 export default MenuListComposition;

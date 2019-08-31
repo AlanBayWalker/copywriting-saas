@@ -9,7 +9,7 @@ import {
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 import { Formik, Form, Field } from 'formik';
-import axios from '../../utility/axios';
+import axios from 'axios';
 import { FormContainer } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
@@ -18,19 +18,11 @@ const LogIn = ({ contextHandler, context: { token } }) => {
   const [errorState, setErrorState] = useState('');
   const loginHandler = async (data, { setSubmitting }) => {
     setSubmitting(true);
-    const tokenResponse = await axios({
-      method: 'post',
-      endPoint: '/login',
-      data,
-    });
+    const tokenResponse = await axios.post('/login', data);
 
     if (tokenResponse.status >= 200 && tokenResponse.status <= 299) {
       contextHandler({ token: tokenResponse.data.token });
-      const user = await axios({
-        method: 'get',
-        endPoint: '/user',
-        token: true,
-      });
+      const user = await axios.get('/user');
 
       if (user.status >= 200 && user.status <= 299) {
         contextHandler({ user: user.data });
@@ -119,7 +111,7 @@ const LogIn = ({ contextHandler, context: { token } }) => {
                 )}
               />
               {errorState && (
-                <Typography color="#ff0000" variant="subtitle">
+                <Typography color="#ff0000" variant="subtitle1">
                   {errorState}
                 </Typography>
               )}

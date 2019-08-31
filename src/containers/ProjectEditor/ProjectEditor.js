@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { ResizeSensor } from 'css-element-queries';
 import debounce from 'lodash/debounce';
 import { Grid } from '@material-ui/core';
+import axios from 'axios';
 import Canvas from '../../components/Canvas/Canvas';
 import WorkSpaceFooterToolbar from '../../components/WorkSpaceFooterToolbar/WorkSpaceFooterToolbar';
 import WorkSpaceHeaderToolbar from '../../components/WorkSpaceHeaderToolbar/WorkSpaceHeaderToolbar';
 import WorkSpacePreview from '../../components/WorkSpacePreview/WorkSpacePreview';
 import WorkSpace from '../../components/WorkSpace/WorkSpace';
 import { withContext } from '../../utility/context';
-import axios from '../../utility/axios';
 
 const propertiesToInclude = [
   'id',
@@ -70,7 +70,7 @@ const defaultOptions = {
   },
 };
 
-class ImageMapEditor extends Component {
+class ProjectEditor extends Component {
   state = {
     selectedItem: null,
     zoomRatio: 1,
@@ -87,9 +87,12 @@ class ImageMapEditor extends Component {
     editing: false,
     descriptors: {},
     uploadDialog: false,
+    projectId: '',
+    editPermission: false,
+    isSaving: false,
   };
 
-  /* eslint-disable */
+  /* eslint-disable react/sort-comp */
   async componentDidMount() {
     this.resizeSensor = new ResizeSensor(this.container, () => {
       const { canvasRect: currentCanvasRect } = this.state;
@@ -111,16 +114,14 @@ class ImageMapEditor extends Component {
 
     if (this.props.location.pathname.split('/').length > 2) {
       const {
-        context: {
-          user
-        },
+        context: { user },
         location: {
           state: { type },
         },
         match: {
           params: { id },
         },
-        contextHandler
+        contextHandler,
       } = this.props;
 
       if (type === 'templateId') {
@@ -129,51 +130,59 @@ class ImageMapEditor extends Component {
         );
         if (completedProjects.length === 0) {
           // call createProject api
-          console.log('Created new project');
-          const project = await axios({
-            method: 'post',
-            endPoint: '/project',
-            data: {
-              templateId: id
-            },
-            token: true,
-          });
+          const project = await axios.post('/project', { templateId: id });
+          console.log(project, 'Created new project');
           if (project.status >= 200 && project.status <= 299) {
             const newUser = {
               ...user,
-              projects: [...user.projects, project.data]
+              projects: [...user.projects, project.data],
             };
-            this.canvasRef.handlers.importJSON(JSON.stringify(project.data.source.objects));
+            this.canvasRef.handlers.importJSON(
+              JSON.stringify(project.data.source.objects)
+            );
             contextHandler({ user: newUser });
+            this.setState({
+              projectId: project.data.projectId,
+              editPermission: true,
+            });
           }
         } else if (completedProjects.length > 0) {
           // continue this project
-          console.log('Continued previous project');
+          console.log(completedProjects[0], 'Continued previous project');
           this.canvasRef.handlers.importJSON(
             JSON.stringify(completedProjects[0].source.objects)
           );
+          this.setState({
+            projectId: completedProjects[0].projectId,
+            editPermission: true,
+          });
         }
       } else if (type === 'projectId') {
-        // call fetchProject
-        console.log('Fetched project');
-        const [item] = user.projects.filter(({ projectId }) => projectId === id);
+        // Continue project with projectId
+        const [item] = user.projects.filter(
+          ({ projectId }) => projectId === id
+        );
         if (item) {
-          this.canvasRef.handlers.importJSON(JSON.stringify(item.source.objects));
+          console.log(item, 'Fetched own project');
+          this.canvasRef.handlers.importJSON(
+            JSON.stringify(item.source.objects)
+          );
+          this.setState({ projectId: item.projectId, editPermission: true });
         } else {
-          const project = await axios({
-            method: 'get',
-            endPoint: `/project/${id}`,
-            token: true,
-          });
+          const project = await axios.get(`/project/${id}`);
+          console.log(project, "Fetched other user's project");
           if (project.status >= 200 && project.status <= 299) {
-            this.canvasRef.handlers.importJSON(JSON.stringify(project.data.source.objects));
+            this.canvasRef.handlers.importJSON(
+              JSON.stringify(project.data.source.objects)
+            );
+            this.setState({ projectId: project.data.projectId });
           }
         }
       }
     }
   }
 
-  /* eslint-enable */
+  /* eslint-enable react/sort-comp */
 
   canvasHandlers = {
     onAdd: target => {
@@ -225,7 +234,13 @@ class ImageMapEditor extends Component {
       this.canvasHandlers.onSelect(null);
     },
     onModified: debounce(target => {
-      if (!this.state.editing) {
+      const { editing, projectId } = this.state;
+      const {
+        context: { user },
+        contextHandler,
+      } = this.props;
+
+      if (!editing) {
         this.changeEditing(true);
       }
       if (
@@ -238,6 +253,29 @@ class ImageMapEditor extends Component {
         this.setState({
           selectedItem: target,
         });
+
+        console.log('modified');
+        const [project] = user.projects.filter(
+          item => item.projectId === projectId
+        );
+        if (project) {
+          const newUser = { ...user };
+          const newProject = { ...project };
+          const objects = this.canvasRef.handlers
+            .exportJSON()
+            .objects.filter(obj => {
+              if (!obj.id) {
+                return false;
+              }
+              return true;
+            });
+          newProject.source.objects = objects;
+          const projectIndex = newUser.projects.findIndex(
+            item => item === project
+          );
+          newUser.projects.splice(projectIndex, 1, newProject);
+          contextHandler({ user: newUser });
+        }
         return;
       }
       this.setState({
@@ -568,6 +606,27 @@ class ImageMapEditor extends Component {
     });
   };
 
+  saveProjectHandler = async () => {
+    const {
+      context: {
+        user: { projects },
+      },
+    } = this.props;
+    const { projectId } = this.state;
+    const [item] = projects.filter(project => project.projectId === projectId);
+    if (item) {
+      this.setState({ isSaving: true });
+      const savedProject = await axios.post(`/project/${item.projectId}`, {
+        project: item,
+      });
+      console.log(savedProject, 'savedProject');
+
+      if (savedProject.status >= 200 && savedProject.status <= 299) {
+        this.setState({ isSaving: false });
+      }
+    }
+  };
+
   render() {
     const {
       preview,
@@ -582,6 +641,8 @@ class ImageMapEditor extends Component {
       editing,
       descriptors,
       uploadDialog,
+      projectId,
+      isSaving,
     } = this.state;
     const {
       onAdd,
@@ -669,6 +730,9 @@ class ImageMapEditor extends Component {
             canvasRef={this.canvasRef}
             onChange={onChange}
             selectedItem={selectedItem}
+            projectId={projectId}
+            saveProjectHandler={this.saveProjectHandler}
+            isSaving={isSaving}
           />
         </Grid>
       </Grid>
@@ -676,4 +740,4 @@ class ImageMapEditor extends Component {
   }
 }
 
-export default withContext(ImageMapEditor);
+export default withContext(ProjectEditor);

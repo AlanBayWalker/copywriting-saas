@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectedProject from '../SelectedProject/SelectedProject';
-import { WorkspaceSideMenu } from './styles';
+import { Tabs, Tab, Button, Grid } from '@material-ui/core';
+import BrandStory from '../BrandStory/BrandStory';
+import BrainStorm from '../BrainStorm/BrainStorm';
+import { WorkspaceSideMenu, TabContainer, OptionsBar } from './styles';
 
-class ImageMapConfigurations extends Component {
+class WorkSpace extends Component {
   static propTypes = {
     canvasRef: PropTypes.any,
     selectedItem: PropTypes.object,
@@ -14,6 +16,14 @@ class ImageMapConfigurations extends Component {
   //   this.mapHandler();
   //   this.urlHandler();
   // }
+
+  state = {
+    tab: 0,
+  };
+
+  tabHandler = (e, tab) => {
+    this.setState({ tab });
+  };
 
   checkMapValue = value => {
     const { canvasRef } = this.props;
@@ -59,7 +69,15 @@ class ImageMapConfigurations extends Component {
   };
 
   render() {
-    const { onChange, selectedItem, canvasRef } = this.props;
+    const {
+      onChange,
+      selectedItem,
+      canvasRef,
+      projectId,
+      saveProjectHandler,
+      isSaving,
+    } = this.props;
+    const { tab } = this.state;
 
     const map = {
       workarea: {
@@ -119,10 +137,57 @@ class ImageMapConfigurations extends Component {
 
     return (
       <WorkspaceSideMenu>
-        <SelectedProject />
+        <Tabs
+          variant="fullWidth"
+          name="Switch"
+          value={tab}
+          onChange={this.tabHandler}
+          aria-label="simple tabs example"
+        >
+          <Tab
+            label="Brand Story"
+            id="simple-tab-0"
+            aria-controls="simple-tabpanel-0"
+          />
+          <Tab
+            label="WorkSpace"
+            id="simple-tab-1"
+            aria-controls="simple-tabpanel-1"
+          />
+        </Tabs>
+        <TabContainer>
+          {tab ? <BrainStorm projectId={projectId} /> : <BrandStory />}
+        </TabContainer>
+        <OptionsBar container justify="space-between">
+          <Grid item xs={3}>
+            {false && (
+              <Button color="primary" variant="outlined" size="large">
+                Like
+              </Button>
+            )}
+          </Grid>
+          <Grid item xs={3}>
+            {false && (
+              <Button color="primary" variant="outlined" size="large">
+                Swipe
+              </Button>
+            )}
+          </Grid>
+          <Grid item xs={5} justify="flex-end">
+            <Button
+              color="primary"
+              variant="outlined"
+              size="large"
+              onClick={saveProjectHandler}
+              disabled={isSaving}
+            >
+              Save Project
+            </Button>
+          </Grid>
+        </OptionsBar>
       </WorkspaceSideMenu>
     );
   }
 }
 
-export default ImageMapConfigurations;
+export default WorkSpace;

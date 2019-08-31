@@ -13,8 +13,8 @@ import EmailIcon from '@material-ui/icons/Email';
 import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import { Formik, Form, Field } from 'formik';
+import axios from 'axios';
 import Link from '../../components/Link/Link';
-import axios from '../../utility/axios';
 import { FormContainer } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
@@ -23,19 +23,11 @@ const SignUp = ({ contextHandler, context: { token } }) => {
   const [errorState, setErrorState] = useState('');
   const signupHandler = async (data, { setSubmitting }) => {
     setSubmitting(true);
-    const tokenResponse = await axios({
-      method: 'post',
-      endPoint: '/signup',
-      data,
-    });
+    const tokenResponse = await axios.post('/signup', data);
 
     if (tokenResponse.status >= 200 && tokenResponse.status <= 299) {
       contextHandler({ token: tokenResponse.data.token });
-      const user = await axios({
-        method: 'get',
-        endPoint: '/user',
-        token: true,
-      });
+      const user = await axios.get('/user');
 
       if (user.status >= 200 && user.status <= 299) {
         contextHandler({ user: user.data });

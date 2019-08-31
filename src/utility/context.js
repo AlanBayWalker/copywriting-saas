@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import store from 'store';
+import axios from 'axios';
 
 export const Context = React.createContext({});
 
@@ -32,6 +33,10 @@ export const Provider = ({ children }) => {
   const [contextValue, setContextValue] = useState(newContext);
   contextHandler = change => {
     setContextValue(prevState => {
+      if (change.token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${change.token}`;
+      }
+
       const updatedContext = {
         ...prevState,
         ...change,
