@@ -1,13 +1,11 @@
 import React from 'react';
 import { Grid, Button } from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
 import Typography from '../Typography/Typography';
 import { Container } from './styles';
 
-const ItemModalHeader = ({ title, author }) => (
-  <Container container alignItems="center">
-    <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column' }}>
+const ItemModalHeader = ({ title, author, onSwipe, handleLocalSwipe }) => (
+  <Container container justify="space-between" alignItems="center">
+    <Grid item style={{ display: 'flex', flexDirection: 'column' }}>
       <Typography gutter="0 0" color="bold" variant="h6">
         {title}
       </Typography>
@@ -17,12 +15,17 @@ const ItemModalHeader = ({ title, author }) => (
         </Typography>
       )}
     </Grid>
-    <Grid item xs={3}>
-      <Button color="primary" variant="outlined" style={{ marginRight: '5px' }}>
-        <BookmarkIcon />
+    <Grid item>
+      <Button
+        color="primary"
+        variant={handleLocalSwipe('contained', 'outlined')}
+        style={{ marginRight: '5px' }}
+        onClick={onSwipe}
+      >
+        Save{handleLocalSwipe('d', '')}
       </Button>
       <Button color="primary" variant="outlined">
-        <FavoriteIcon />
+        Like
       </Button>
     </Grid>
   </Container>

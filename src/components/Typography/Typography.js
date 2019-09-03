@@ -10,6 +10,10 @@ const colorHandler = color => {
       return '#3f4a4d';
     case color === 'contrast':
       return '#fff';
+    case color === 'primary':
+      return '#74b9ff';
+    case color === 'error':
+      return '#ff0000';
     case color && color.length > 0:
       return color;
     default:

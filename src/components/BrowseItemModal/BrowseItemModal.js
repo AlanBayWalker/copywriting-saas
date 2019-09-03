@@ -21,6 +21,8 @@ const BrowseItemModal = ({
   categories,
   templateId,
   projectId,
+  onSwipe,
+  handleLocalSwipe,
   context: { user },
 }) => {
   const pathHandler = (originalProject, cloneProject) =>
@@ -38,7 +40,12 @@ const BrowseItemModal = ({
       onClose={dialogCloseHandler}
       aria-labelledby="form-dialog-title"
     >
-      <ItemModalHeader title={title} author={author} />
+      <ItemModalHeader
+        title={title}
+        author={author}
+        onSwipe={onSwipe}
+        handleLocalSwipe={handleLocalSwipe}
+      />
       <DialogContent>
         <img
           src={thumbnail}

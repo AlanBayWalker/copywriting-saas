@@ -29,6 +29,9 @@ import Typography from '../../components/Typography/Typography';
 import projects from '../../utility/projects';
 import { withContext } from '../../utility/context';
 
+const noImg =
+  'https://firebasestorage.googleapis.com/v0/b/adverwriting.appspot.com/o/no-img.jpg?alt=media';
+
 const capitalizeStr = string => {
   const splitString = string.split('');
   splitString.splice(0, 1, string[0].toUpperCase());
@@ -72,11 +75,14 @@ const UserProfile = ({
   const [profileEditorError, setProfileEditorError] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [editorImage, setEditorImage] = useState(null);
+
   const profileEditorOpen = () => setProfileEditorState(true);
+
   const profileEditorClose = () => {
     setProfileEditorState(false);
     setEditorImage(null);
   };
+
   const profileImageHandler = ({ currentTarget: { files } }) => {
     const image = files[0];
     const formData = new FormData();
@@ -84,6 +90,11 @@ const UserProfile = ({
     setProfileImage(formData);
     const imageURL = URL.createObjectURL(image);
     setEditorImage(imageURL);
+  };
+
+  const deleteProfileImageHandler = () => {
+    setProfileImage(noImg);
+    setEditorImage(noImg);
   };
 
   const saveProfileHandler = async (data, { setSubmitting }) => {
@@ -104,7 +115,10 @@ const UserProfile = ({
     };
 
     if (profileImage) {
-      const imageResponse = await axios.post('/user/image', profileImage);
+      const imageResponse =
+        profileImage === noImg
+          ? await axios.delete('/user/image')
+          : await axios.post('/user/image', profileImage);
 
       if (imageResponse.status >= 200 && imageResponse.status <= 299) {
         newUser.credentials.imageUrl = imageResponse.data.imageUrl;
@@ -130,7 +144,7 @@ const UserProfile = ({
   };
 
   useEffect(() => {
-    if (user.credentials.username === username) {
+    if (user.credentials && user.credentials.username === username) {
       const userInfo = {
         user: user.credentials,
         projects: user.projects,
@@ -145,7 +159,7 @@ const UserProfile = ({
     <>
       <MainNav />
       <Header>
-        {user.credentials.username === username && (
+        {user.credentials && user.credentials.username === username && (
           <EditProfileButton variant="outlined" onClick={profileEditorOpen}>
             Edit Profile
           </EditProfileButton>
@@ -158,11 +172,7 @@ const UserProfile = ({
             @{userState.user ? userState.user.username : 'username'}
           </Typography>
           <ProfileAvatar
-            src={
-              userState.user
-                ? userState.user.imageUrl
-                : 'https://firebasestorage.googleapis.com/v0/b/adverwriting.appspot.com/o/no-img.jpg?alt=media&token=b74e840b-a0b7-45e4-9528-a23951901aee'
-            }
+            src={userState.user ? userState.user.imageUrl : noImg}
             alt="Profile"
           />
           <Typography align="center">
@@ -227,7 +237,6 @@ const UserProfile = ({
                     <HiddenInput
                       onChange={profileImageHandler}
                       accept="image/*"
-                      style={{ display: 'none' }}
                       id="raised-button-file"
                       type="file"
                     />
@@ -242,7 +251,12 @@ const UserProfile = ({
                     </label>
                   </Grid>
                   <Grid item>
-                    <Button variant="contained">Delete</Button>
+                    <Button
+                      variant="contained"
+                      onClick={deleteProfileImageHandler}
+                    >
+                      Delete
+                    </Button>
                   </Grid>
                   {renderField(errors)}
                 </Grid>

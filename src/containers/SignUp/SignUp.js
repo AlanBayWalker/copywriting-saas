@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
 import {
-  Container,
+  Dialog,
+  DialogContent,
   Grid,
   TextField,
   InputAdornment,
@@ -10,31 +10,30 @@ import {
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import Link from '../../components/Link/Link';
-import { FormContainer } from './styles';
+import { DialogHeader, DialogActions } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
+import history from '../../utility/history';
 
-const SignUp = ({ contextHandler, context: { token } }) => {
-  const [errorState, setErrorState] = useState('');
-  const signupHandler = async (data, { setSubmitting }) => {
+const SignUp = ({ contextHandler, context: { authDialog } }) => {
+  const signupHandler = async (data, { setSubmitting, setErrors }) => {
     setSubmitting(true);
     const tokenResponse = await axios.post('/signup', data);
 
     if (tokenResponse.status >= 200 && tokenResponse.status <= 299) {
-      contextHandler({ token: tokenResponse.data.token });
-      const user = await axios.get('/user');
-
-      if (user.status >= 200 && user.status <= 299) {
-        contextHandler({ user: user.data });
-      }
+      contextHandler({
+        token: tokenResponse.data.token,
+        user: tokenResponse.data.user,
+        authDialog: '',
+      });
+      history.push('/user-details');
     } else {
       setSubmitting(false);
-      setErrorState(tokenResponse.data.general);
+      setErrors(tokenResponse.data);
     }
   };
 
@@ -54,39 +53,28 @@ const SignUp = ({ contextHandler, context: { token } }) => {
       errors.password = 'Required';
     }
 
-    if (values.password !== values.confirmPassword) {
-      errors.confirmPassword = "Passwords don't match";
-    }
-
     if (!values.name) {
       errors.name = 'Required';
     }
 
-    if (!values.location) {
-      errors.location = 'Required';
-    }
-
-    if (!values.bio) {
-      errors.bio = 'Required';
-    }
     return errors;
   };
 
   const initialValues = {
     email: '',
-    username: '',
     password: '',
-    confirmPassword: '',
+    username: '',
     name: '',
-    location: '',
-    bio: '',
   };
 
-  if (token) return <Redirect to="/" />;
-
   return (
-    <Container maxWidth="sm">
-      <FormContainer>
+    <Dialog
+      open={authDialog === 'signup'}
+      onClose={() => null}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogHeader>
         <Typography
           color="bold"
           variant="h4"
@@ -94,11 +82,13 @@ const SignUp = ({ contextHandler, context: { token } }) => {
           align="center"
           paragraph
         >
-          SIGN UP TO SWIPE CAMP
+          SIGN UP TO SWIPE CLOUD
         </Typography>
         <Typography align="center" paragraph>
           Unlock your life one sale at the time!
         </Typography>
+      </DialogHeader>
+      <DialogContent>
         <Formik
           initialValues={initialValues}
           validate={validationHandler}
@@ -107,168 +97,95 @@ const SignUp = ({ contextHandler, context: { token } }) => {
           {({ isSubmitting, errors }) => (
             <Form>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    name="email"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.email)}
-                        helperText={errors.email}
-                        fullWidth
-                        label="Email"
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <EmailIcon color="disabled" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    name="username"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.username)}
-                        helperText={errors.username}
-                        fullWidth
-                        label="Username"
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <PersonIcon color="disabled" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    name="password"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.password)}
-                        helperText={errors.password}
-                        type="password"
-                        fullWidth
-                        label="Password"
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <LockIcon color="disabled" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.confirmPassword)}
-                        helperText={errors.confirmPassword}
-                        type="password"
-                        fullWidth
-                        label="Confirm Password"
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <LockIcon color="disabled" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    name="name"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.name)}
-                        helperText={errors.name}
-                        fullWidth
-                        label="First and last name"
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <InsertEmoticonIcon color="disabled" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Field
-                    name="location"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.location)}
-                        helperText={errors.location}
-                        fullWidth
-                        label="Location"
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <GpsFixedIcon color="disabled" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    name="bio"
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        error={Boolean(errors.bio)}
-                        helperText={errors.bio}
-                        fullWidth
-                        multiline
-                        rows={5}
-                        label="Bio"
-                        margin="normal"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                </Grid>
+                <Field
+                  name="email"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.email)}
+                      helperText={errors.email}
+                      fullWidth
+                      label="Email"
+                      margin="normal"
+                      variant="outlined"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <EmailIcon color="disabled" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
+                />
+                <Field
+                  name="password"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.password)}
+                      helperText={errors.password}
+                      type="password"
+                      fullWidth
+                      label="Password"
+                      margin="normal"
+                      variant="outlined"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockIcon color="disabled" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
+                />
+                <Field
+                  name="username"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.username)}
+                      helperText={errors.username}
+                      fullWidth
+                      label="Username"
+                      margin="normal"
+                      variant="outlined"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PersonIcon color="disabled" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
+                />
+                <Field
+                  name="name"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      error={Boolean(errors.name)}
+                      helperText={errors.name}
+                      fullWidth
+                      label="First and last name"
+                      margin="normal"
+                      variant="outlined"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <InsertEmoticonIcon color="disabled" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
+                />
               </Grid>
-              {errorState && (
-                <Typography color="#ff0000" variant="subtitle">
-                  {errorState}
+              {errors.general && (
+                <Typography color="#ff0000" variant="subtitle1">
+                  {errors.general}
                 </Typography>
               )}
               <Link to="/login">
@@ -276,19 +193,22 @@ const SignUp = ({ contextHandler, context: { token } }) => {
                   Already have an account?
                 </Typography>
               </Link>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                Sign Up
-              </Button>
+              <DialogActions>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  disabled={isSubmitting}
+                  fullWidth
+                >
+                  Create Account
+                </Button>
+              </DialogActions>
             </Form>
           )}
         </Formik>
-      </FormContainer>
-    </Container>
+      </DialogContent>
+    </Dialog>
   );
 };
 

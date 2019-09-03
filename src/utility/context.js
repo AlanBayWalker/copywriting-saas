@@ -28,6 +28,7 @@ export const Provider = ({ children }) => {
   const initialContext = {
     token: '',
     user: {},
+    authDialog: '',
   };
   const newContext = store.get('app') || initialContext;
   const [contextValue, setContextValue] = useState(newContext);

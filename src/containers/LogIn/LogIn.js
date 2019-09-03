@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import {
-  Container,
   TextField,
   InputAdornment,
   Button,
+  Dialog,
+  DialogContent,
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
-import { FormContainer } from './styles';
+import { DialogHeader, DialogActions } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
 
-const LogIn = ({ contextHandler, context: { token } }) => {
+const LogIn = ({ contextHandler, context: { authDialog } }) => {
   const [errorState, setErrorState] = useState('');
+
+  const dialogCloseHandler = () => contextHandler({ authDialog: '' });
+  const dialogOpenHandler = () => contextHandler({ authDialog: 'login' });
+
   const loginHandler = async (data, { setSubmitting }) => {
     setSubmitting(true);
+    dialogCloseHandler();
     const tokenResponse = await axios.post('/login', data);
 
     if (tokenResponse.status >= 200 && tokenResponse.status <= 299) {
@@ -30,6 +35,7 @@ const LogIn = ({ contextHandler, context: { token } }) => {
     } else {
       setSubmitting(false);
       setErrorState(tokenResponse.data.general);
+      dialogOpenHandler();
     }
   };
 
@@ -43,11 +49,14 @@ const LogIn = ({ contextHandler, context: { token } }) => {
     return errors;
   };
 
-  if (token) return <Redirect to="/" />;
-
   return (
-    <Container maxWidth="sm">
-      <FormContainer>
+    <Dialog
+      open={authDialog === 'login'}
+      onClose={dialogCloseHandler}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogHeader>
         <Typography
           color="bold"
           variant="h4"
@@ -55,11 +64,13 @@ const LogIn = ({ contextHandler, context: { token } }) => {
           align="center"
           paragraph
         >
-          LOG IN TO SWIPE CAMP
+          LOG IN TO SWIPE CLOUD
         </Typography>
         <Typography align="center" paragraph>
           Unlock your life one sale at the time!
         </Typography>
+      </DialogHeader>
+      <DialogContent>
         <Formik
           initialValues={{ email: '', password: 'password' }}
           validate={validationHandler}
@@ -118,19 +129,22 @@ const LogIn = ({ contextHandler, context: { token } }) => {
               <Typography color="light" align="right">
                 Forgot your Password?
               </Typography>
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                Log In
-              </Button>
+              <DialogActions>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  disabled={isSubmitting}
+                  fullWidth
+                >
+                  Log In
+                </Button>
+              </DialogActions>
             </Form>
           )}
         </Formik>
-      </FormContainer>
-    </Container>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { Paper } from '@material-ui/core';
+import { DialogActions as MUDialogActions } from '@material-ui/core';
 
-export const FormContainer = styled(Paper)`
-  padding: 2rem;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+export const DialogHeader = styled.header`
+  padding-top: 2rem;
+`;
+
+export const DialogActions = styled(MUDialogActions)`
+  padding-bottom: 2rem;
 `;

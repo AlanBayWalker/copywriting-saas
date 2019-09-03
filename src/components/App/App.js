@@ -4,6 +4,7 @@ import { ThemeProvider, StylesProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import store from 'store';
+import decode from 'jwt-decode';
 import Routes from '../Routes/Routes';
 import { Provider } from '../../utility/context';
 
@@ -12,17 +13,43 @@ const publicUrl = 'https://us-central1-adverwriting.cloudfunctions.net/api';
 const app = store.get('app');
 
 axios.defaults.baseURL = localUrl;
-axios.defaults.headers.common.Authorization = app ? `Bearer ${app.token}` : '';
+if (app && app.token) {
+  axios.defaults.headers.common.Authorization = `Bearer ${app.token}`;
+}
 
 axios.interceptors.response.use(
-  response => {
-    // Do something with response data
-    console.log(response);
-    return response;
+  response => response,
+  error => {
+    console.error(error.response);
+    return error.response;
+  }
+);
+
+axios.interceptors.request.use(
+  async config => {
+    if (config.headers.common.Authorization) {
+      const token = config.headers.common.Authorization.split('Bearer ')[1];
+      const tokenExp = decode(token).exp;
+      const endpoint = config.url.split(config.baseURL)[0];
+      if (
+        tokenExp < new Date().getTime() / 1000 &&
+        endpoint !== '/refresh-token'
+      ) {
+        const uid = store.get('app').user.credentials.userId;
+        const tokenRes = await axios.post('/refresh-token', { uid });
+
+        if (tokenRes.status >= 200 && tokenRes.status <= 299) {
+          const newToken = `Bearer ${tokenRes.data.token}`;
+          axios.defaults.headers.common.Authorization = newToken;
+          config.headers.common.Authorization = newToken;
+        }
+      }
+    }
+
+    return config;
   },
   error => {
-    // Do something with response error
-    console.log(error.response);
+    console.error(error, 'Request Interceptor');
     return error.response;
   }
 );

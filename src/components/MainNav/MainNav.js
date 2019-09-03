@@ -9,24 +9,32 @@ import SearchBar from '../SearchBar/SearchBar';
 import Logo from '../../assets/logo.png';
 import { withContext } from '../../utility/context';
 
-const AuthButtons = () => (
-  <>
-    <Grid item>
-      <Link to="/login">
-        <Button color="secondary" variant="contained">
+const AuthButtons = ({ contextHandler }) => {
+  const authDialogHandler = authDialog => () => contextHandler({ authDialog });
+
+  return (
+    <>
+      <Grid item>
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={authDialogHandler('login')}
+        >
           Log In
         </Button>
-      </Link>
-    </Grid>
-    <Grid item>
-      <Link to="/signup">
-        <Button color="secondary" variant="outlined">
+      </Grid>
+      <Grid item>
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={authDialogHandler('signup')}
+        >
           Sign Up
         </Button>
-      </Link>
-    </Grid>
-  </>
-);
+      </Grid>
+    </>
+  );
+};
 
 const UserMenu = ({ clearContext, username }) => {
   const [menuState, setMenuState] = useState(null);
@@ -78,10 +86,9 @@ const UserMenu = ({ clearContext, username }) => {
 const MainNav = ({
   context: {
     token,
-    user: {
-      credentials: { username },
-    },
+    user: { credentials },
   },
+  contextHandler,
   clearContext,
 }) => (
   <Container position="static">
@@ -120,9 +127,12 @@ const MainNav = ({
               <SearchBar />
             </Grid>
             {token ? (
-              <UserMenu clearContext={clearContext} username={username} />
+              <UserMenu
+                clearContext={clearContext}
+                username={credentials && credentials.username}
+              />
             ) : (
-              <AuthButtons />
+              <AuthButtons contextHandler={contextHandler} />
             )}
           </Grid>
         </Grid>

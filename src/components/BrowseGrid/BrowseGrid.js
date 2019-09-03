@@ -5,11 +5,21 @@ import { Skeleton } from '@material-ui/lab';
 import { Container } from './styles';
 import BrowseItem from '../BrowseItem/BrowseItem';
 
-const projectsRender = items => {
+const projectsRender = (items, unswipeHandler) => {
   if (items && items.length) {
     return items.map(config => (
-      <Grid item xs={12} sm={6} md={4} lg={3} key={config.title}>
-        <BrowseItem {...config} />
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={3}
+        key={
+          config.projectId ||
+          config.templateId + Math.round(Math.random() * 1000000000)
+        }
+      >
+        <BrowseItem {...config} unswipeHandler={unswipeHandler} />
       </Grid>
     ));
   }
@@ -20,9 +30,9 @@ const projectsRender = items => {
   ));
 };
 
-const BrowseGrid = ({ items }) => (
+const BrowseGrid = ({ items, unswipeHandler }) => (
   <Container container justify="space-between" spacing={8}>
-    {projectsRender(items)}
+    {projectsRender(items, unswipeHandler)}
   </Container>
 );
 
