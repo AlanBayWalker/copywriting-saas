@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
 } from '@material-ui/core';
@@ -54,7 +53,7 @@ const renderField = errors => {
             label={capitalizeStr(fieldName)}
             margin="normal"
             variant="outlined"
-            disabled={fieldName === 'email'}
+            disabled={fieldName === 'email' || fieldName === 'username'}
           />
         )}
       />

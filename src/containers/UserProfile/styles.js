@@ -48,6 +48,5 @@ export const EditorAvatar = styled(Avatar)`
 `;
 
 export const HiddenInput = styled.input`
-  height: 60px;
-  width: 60px;
+  display: none;
 `;

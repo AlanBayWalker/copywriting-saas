@@ -88,6 +88,7 @@ class ProjectEditor extends Component {
     descriptors: {},
     uploadDialog: false,
     projectId: '',
+    project: {},
     editPermission: false,
     isSaving: false,
   };
@@ -125,6 +126,7 @@ class ProjectEditor extends Component {
       } = this.props;
 
       if (type === 'templateId') {
+        console.log(user, 'user');
         const completedProjects = user.projects.filter(
           ({ templateId }) => templateId === id
         );
@@ -143,6 +145,7 @@ class ProjectEditor extends Component {
             contextHandler({ user: newUser });
             this.setState({
               projectId: project.data.projectId,
+              project: project.data,
               editPermission: true,
             });
           }
@@ -154,6 +157,7 @@ class ProjectEditor extends Component {
           );
           this.setState({
             projectId: completedProjects[0].projectId,
+            project: completedProjects[0],
             editPermission: true,
           });
         }
@@ -167,7 +171,11 @@ class ProjectEditor extends Component {
           this.canvasRef.handlers.importJSON(
             JSON.stringify(item.source.objects)
           );
-          this.setState({ projectId: item.projectId, editPermission: true });
+          this.setState({
+            projectId: item.projectId,
+            project: item,
+            editPermission: true,
+          });
         } else {
           const project = await axios.get(`/project/${id}`);
           console.log(project, "Fetched other user's project");
@@ -175,11 +183,15 @@ class ProjectEditor extends Component {
             this.canvasRef.handlers.importJSON(
               JSON.stringify(project.data.source.objects)
             );
-            this.setState({ projectId: project.data.projectId });
+            this.setState({
+              projectId: project.data.projectId,
+              project: project.data,
+            });
           }
         }
       }
     }
+    console.log('End project Fetch');
   }
 
   /* eslint-enable react/sort-comp */
@@ -614,12 +626,12 @@ class ProjectEditor extends Component {
     } = this.props;
     const { projectId } = this.state;
     const [item] = projects.filter(project => project.projectId === projectId);
+
     if (item) {
       this.setState({ isSaving: true });
       const savedProject = await axios.post(`/project/${item.projectId}`, {
         project: item,
       });
-      console.log(savedProject, 'savedProject');
 
       if (savedProject.status >= 200 && savedProject.status <= 299) {
         this.setState({ isSaving: false });
@@ -642,6 +654,7 @@ class ProjectEditor extends Component {
       descriptors,
       uploadDialog,
       projectId,
+      project,
       isSaving,
     } = this.state;
     const {
@@ -668,6 +681,7 @@ class ProjectEditor extends Component {
     return (
       <Grid container>
         <Grid item md={9} style={{ height: '95.5vh' }}>
+          <button onClick={onDownload}>Download</button>
           <WorkSpaceHeaderToolbar
             ref={c => {
               this.itemsRef = c;
@@ -733,6 +747,7 @@ class ProjectEditor extends Component {
             projectId={projectId}
             saveProjectHandler={this.saveProjectHandler}
             isSaving={isSaving}
+            project={project}
           />
         </Grid>
       </Grid>

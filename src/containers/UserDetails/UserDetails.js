@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { Formik, Field } from 'formik';
 import axios from 'axios';
+import _ from 'lodash';
 import {
   AppBar,
   Logo,
@@ -26,6 +27,7 @@ import {
 import Typography from '../../components/Typography/Typography';
 import logo from '../../assets/logo.png';
 import { withContext } from '../../utility/context';
+import history from '../../utility/history';
 
 const UserDetails = ({ context, contextHandler }) => {
   const [editorImage, setEditorImage] = useState(null);
@@ -34,30 +36,52 @@ const UserDetails = ({ context, contextHandler }) => {
   const saveProfileHandler = async (data, { setSubmitting, setErrors }) => {
     setSubmitting(true);
     const user = {
-      bio: data.bio,
-      location: data.location,
+      ...context.user,
+      credentials: {
+        ...context.user.credentials,
+        bio: data.bio,
+        location: data.location,
+      },
     };
+    const survey = {};
 
     if (editorImage) {
       const imageResponse = await axios.post('/user/image', imageBlob);
-      console.log(imageResponse);
 
       if (imageResponse.status >= 200 && imageResponse.status <= 299) {
-        console.log(imageResponse.data.imageUrl);
-        user.imageUrl = imageResponse.data.imageUrl;
+        user.credentials.imageUrl = imageResponse.data.imageUrl;
       } else {
         setErrors(imageResponse.data.error);
         setSubmitting(false);
       }
     }
 
-    const userResponse = await axios.post('/user', data);
+    if (data.hired) {
+      survey.hired = true;
+    }
+    if (data.inspiration) {
+      survey.inspiration = true;
+    }
+    if (data.learn) {
+      survey.learn = true;
+    }
+    if (data.practice) {
+      survey.practice = true;
+    }
+    if (Object.keys(survey).length) {
+      axios.post('/surveys/sign-up', survey);
+    }
 
-    if (userResponse.status >= 200 && userResponse.status <= 299) {
-      contextHandler({ user });
-    } else {
-      setSubmitting(false);
-      setErrors(userResponse.data.error);
+    if (!_.isEqual(context.user, user)) {
+      const userResponse = await axios.post('/user', data);
+
+      if (userResponse.status >= 200 && userResponse.status <= 299) {
+        contextHandler({ user });
+        history.push('/');
+      } else {
+        setSubmitting(false);
+        setErrors(userResponse.data.error);
+      }
     }
   };
 
@@ -87,8 +111,10 @@ const UserDetails = ({ context, contextHandler }) => {
         </Typography>
       </Header>
       <Formik
-        initialValues={null}
-        validate={null}
+        initialValues={{
+          bio: '',
+          location: '',
+        }}
         onSubmit={saveProfileHandler}
       >
         {({ isSubmitting, errors }) => (
@@ -228,8 +254,7 @@ const UserDetails = ({ context, contextHandler }) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                onClick={() => null}
-                disable={isSubmitting ? 1 : 0}
+                disabled={isSubmitting}
               >
                 Finish
               </Button>

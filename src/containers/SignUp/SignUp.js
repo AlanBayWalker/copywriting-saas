@@ -13,13 +13,15 @@ import EmailIcon from '@material-ui/icons/Email';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
-import Link from '../../components/Link/Link';
 import { DialogHeader, DialogActions } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
 import history from '../../utility/history';
 
 const SignUp = ({ contextHandler, context: { authDialog } }) => {
+  const dialogCloseHandler = () => contextHandler({ authDialog: '' });
+  const dialogOpenHandler = authDialog => () => contextHandler({ authDialog });
+
   const signupHandler = async (data, { setSubmitting, setErrors }) => {
     setSubmitting(true);
     const tokenResponse = await axios.post('/signup', data);
@@ -70,7 +72,7 @@ const SignUp = ({ contextHandler, context: { authDialog } }) => {
   return (
     <Dialog
       open={authDialog === 'signup'}
-      onClose={() => null}
+      onClose={dialogCloseHandler}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -188,11 +190,14 @@ const SignUp = ({ contextHandler, context: { authDialog } }) => {
                   {errors.general}
                 </Typography>
               )}
-              <Link to="/login">
-                <Typography color="light" align="right">
-                  Already have an account?
-                </Typography>
-              </Link>
+              <Typography
+                color="light"
+                align="right"
+                onClick={dialogOpenHandler('login')}
+                style={{ cursor: 'pointer' }}
+              >
+                Already have an account?
+              </Typography>
               <DialogActions>
                 <Button
                   color="primary"

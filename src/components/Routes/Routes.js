@@ -9,6 +9,8 @@ import LogIn from '../../containers/LogIn/LogIn';
 import SwipeFolder from '../../containers/SwipeFolder/SwipeFolder';
 import SelectedSwipeFolder from '../../containers/SelectedSwipeFolder/SelectedSwipeFolder';
 import UserDetails from '../../containers/UserDetails/UserDetails';
+import AuthRedirect from '../../containers/AuthRedirect/AuthRedirect';
+import ContactForm from '../ContactForm/ContactForm';
 import { withContext } from '../../utility/context';
 
 const PrivateRoute = withContext(({ component: Component, ...rest }) => (
@@ -20,8 +22,8 @@ const PrivateRoute = withContext(({ component: Component, ...rest }) => (
       ) : (
         <Redirect
           to={{
-            pathname: '/login',
-            state: { from: props.location },
+            pathname: '/auth-redirect',
+            state: { from: props.location.pathname },
           }}
         />
       )
@@ -34,8 +36,9 @@ const Routes = () => (
     <Route exact path="/" component={ExploreProjects} />
     <Route exact path="/explore/:templateId" component={ExploreProjects} />
     <Route exact path="/profile/:username" component={UserProfile} />
+    <Route exact path="/auth-redirect" component={AuthRedirect} />
 
-    <Route exact path="/user-details" component={UserDetails} />
+    <PrivateRoute exact path="/user-details" component={UserDetails} />
     <PrivateRoute exact path="/swipe-folder" component={SwipeFolder} />
     <PrivateRoute
       exact
@@ -46,6 +49,7 @@ const Routes = () => (
 
     <LogIn />
     <SignUp />
+    <ContactForm />
   </Router>
 );
 

@@ -10,6 +10,7 @@ const BrowseItem = item => {
   const [dialogStatus, setDialogStatus] = useState(false);
   const [swipeDialog, setSwipeDialog] = useState(false);
   const [swipeStatus, setSwipeStatus] = useState(null);
+  const [likeStatus, setLikeStatus] = useState(null);
 
   const dialogCloseHandler = () => setDialogStatus(false);
   const dialogOpenHandler = () => setDialogStatus(true);
@@ -30,6 +31,29 @@ const BrowseItem = item => {
     if (res.status >= 200 && res.status <= 299) {
       item.unswipeHandler && item.unswipeHandler(item.projectId);
       setSwipeStatus(false);
+    }
+  };
+
+  const handleLocalLike = (likeOn, likeOff) => {
+    if (likeStatus === null) {
+      return item.liked ? likeOn : likeOff;
+    }
+    return likeStatus ? likeOn : likeOff;
+  };
+
+  const likeHandler = async () => {
+    const res = await axios.get(`/project/${item.projectId}/like`);
+    if (res.status >= 200 && res.status <= 299) {
+      // item.unswipeHandler && item.unswipeHandler(item.projectId);
+      setLikeStatus(true);
+    }
+  };
+
+  const unlikeHandler = async () => {
+    const res = await axios.get(`/project/${item.projectId}/unlike`);
+    if (res.status >= 200 && res.status <= 299) {
+      // item.unswipeHandler && item.unswipeHandler(item.projectId);
+      setLikeStatus(false);
     }
   };
 
@@ -65,8 +89,13 @@ const BrowseItem = item => {
                 >
                   Save{handleLocalSwipe('d', '')}
                 </Button>
-                <Button variant="outlined" size="small" color="primary">
-                  Like
+                <Button
+                  variant={handleLocalLike('contained', 'outlined')}
+                  size="small"
+                  color="primary"
+                  onClick={handleLocalLike(unlikeHandler, likeHandler)}
+                >
+                  Like{handleLocalLike('d', '')}
                 </Button>
               </Grid>
             )}

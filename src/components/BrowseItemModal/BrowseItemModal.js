@@ -45,6 +45,7 @@ const BrowseItemModal = ({
         author={author}
         onSwipe={onSwipe}
         handleLocalSwipe={handleLocalSwipe}
+        projectId={projectId}
       />
       <DialogContent>
         <img

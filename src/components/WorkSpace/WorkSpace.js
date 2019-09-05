@@ -12,10 +12,10 @@ class WorkSpace extends Component {
     onChange: PropTypes.func,
   };
 
-  // componentDidMount() {
-  //   this.mapHandler();
-  //   this.urlHandler();
-  // }
+  componentDidMount() {
+    // this.mapHandler();
+    // this.urlHandler();
+  }
 
   state = {
     tab: 0,
@@ -56,7 +56,7 @@ class WorkSpace extends Component {
     const { selectedItem, onChange } = this.props;
     const change = {
       src:
-        'https://res.cloudinary.com/dzv9elyyj/image/upload/v1566922944/Copywriting%20Projects/PenDraw_phhhpj.png',
+        'https://res.cloudinary.com/dzv9elyyj/image/upload/v1567637834/Copywriting%20Projects/T-print_ibgr5d.png',
     };
     const allData = {
       workarea: {
@@ -76,6 +76,7 @@ class WorkSpace extends Component {
       projectId,
       saveProjectHandler,
       isSaving,
+      project,
     } = this.props;
     const { tab } = this.state;
 
@@ -156,7 +157,11 @@ class WorkSpace extends Component {
           />
         </Tabs>
         <TabContainer>
-          {tab ? <BrainStorm projectId={projectId} /> : <BrandStory />}
+          {tab ? (
+            <BrainStorm projectId={projectId} />
+          ) : (
+            <BrandStory brandStory={project.brandStory} title={project.title} />
+          )}
         </TabContainer>
         <OptionsBar container justify="space-between">
           <Grid item xs={3}>
