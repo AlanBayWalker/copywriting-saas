@@ -19,19 +19,19 @@ const cards = [
     icon: <CreateIcon />,
     header: 'Learn to write copy',
     content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+      'Do you feel lost when It comes to embarking on your copywriting journey? Swipe Cloud makes it easy to get ahead of the curve. You no longer have to sort through industry noise just to find out the information you need is behind a $1000 paywall.',
   },
   {
     icon: <FormatShapesIcon />,
     header: 'Practice your skills',
     content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+      'Gain confidence in your ability to provide quality work for clients. Stop browsing the web for practice projects you can use to develop your skills. Swipe Cloud has custom made mock companies you can copywrite for. ',
   },
   {
     icon: <FilterDramaIcon />,
     header: 'Share your work',
     content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+      'With Swipe Cloud you can share and browse the work of many talented copywriters. Embark on a journey to build the ultimate swipe file and find inspiration in the specific niche you currently write for. ',
   },
 ];
 

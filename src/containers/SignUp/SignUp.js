@@ -13,10 +13,11 @@ import EmailIcon from '@material-ui/icons/Email';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
-import { DialogHeader, DialogActions } from './styles';
+import { DialogActions } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
 import history from '../../utility/history';
+import DialogHeader from '../../assets/dialog-auth-header.png';
 
 const SignUp = ({ contextHandler, context: { authDialog } }) => {
   const dialogCloseHandler = () => contextHandler({ authDialog: '' });
@@ -76,20 +77,7 @@ const SignUp = ({ contextHandler, context: { authDialog } }) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogHeader>
-        <Typography
-          color="bold"
-          variant="h4"
-          component="h1"
-          align="center"
-          paragraph
-        >
-          SIGN UP TO SWIPE CLOUD
-        </Typography>
-        <Typography align="center" paragraph>
-          Unlock your life one sale at the time!
-        </Typography>
-      </DialogHeader>
+      <img src={DialogHeader} />
       <DialogContent>
         <Formik
           initialValues={initialValues}

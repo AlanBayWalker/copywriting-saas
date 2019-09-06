@@ -43,6 +43,7 @@ const SwipeFolder = () => {
   const [dialogState, setDialogState] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState({});
   const [dialogError, setDialogError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const menuCloseHandler = () => setMenuState(null);
   const menuOpenHandler = ({ currentTarget }) => setMenuState(currentTarget);
@@ -94,87 +95,104 @@ const SwipeFolder = () => {
   };
 
   useEffect(() => {
-    axios.get('/swipe-folders').then(({ data }) => setFolders(data));
+    axios.get('/swipe-folders').then(({ data }) => {
+      setLoading(false);
+      setFolders(data);
+    });
   }, []);
+
+  const renderFolder = () => {
+    if (loading) {
+      return (
+        <LoaderContainer>
+          <CircularProgress size={60} />
+        </LoaderContainer>
+      );
+    }
+    if (!loading && !folders.length) {
+      return (
+        <LoaderContainer>
+          <Typography>
+            You don't have any folders yet. Save a project to create one
+          </Typography>
+        </LoaderContainer>
+      );
+    }
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Item Count</TableCell>
+            <TableCell>Created</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {folders.map(
+            ({ name, description, projects, createdAt, folderId }) => (
+              <TableRow key={folderId}>
+                <LinkCell onClick={linkHandler(folderId, name, projects)}>
+                  <Typography
+                    variant="subtitle2"
+                    display="inline"
+                    color="primary"
+                  >
+                    <FolderIcon />
+                    {name}
+                  </Typography>
+                </LinkCell>
+                <TableCell>{projects.length}</TableCell>
+                <TableCell>{turnISOToDate(createdAt)}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={selectedFolderHandler({
+                      name,
+                      projects,
+                      createdAt,
+                      folderId,
+                      description,
+                    })}
+                    aria-controls="swipe-folder-menu"
+                    aria-haspopup="true"
+                  >
+                    <MoreVertIcon />
+                  </Button>
+                  <Menu
+                    id="swipe-folder-menu"
+                    anchorEl={menuState}
+                    open={Boolean(menuState)}
+                    onClose={menuCloseHandler}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                  >
+                    <MenuItem onClick={dialogOpenHandler('edit')}>
+                      <Typography>Edit Details</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={dialogOpenHandler('delete')}>
+                      <Typography color="error">Delete Folder</Typography>
+                    </MenuItem>
+                  </Menu>
+                </TableCell>
+              </TableRow>
+            )
+          )}
+        </TableBody>
+      </Table>
+    );
+  };
 
   return (
     <>
       <MainNav />
-      <Container>
-        {folders.length ? (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Item Count</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {folders.map(
-                ({ name, description, projects, createdAt, folderId }) => (
-                  <TableRow key={folderId}>
-                    <LinkCell onClick={linkHandler(folderId, name, projects)}>
-                      <Typography
-                        variant="subtitle2"
-                        display="inline"
-                        color="primary"
-                      >
-                        <FolderIcon />
-                        {name}
-                      </Typography>
-                    </LinkCell>
-                    <TableCell>{projects.length}</TableCell>
-                    <TableCell>{turnISOToDate(createdAt)}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={selectedFolderHandler({
-                          name,
-                          projects,
-                          createdAt,
-                          folderId,
-                          description,
-                        })}
-                        aria-controls="swipe-folder-menu"
-                        aria-haspopup="true"
-                      >
-                        <MoreVertIcon />
-                      </Button>
-                      <Menu
-                        id="swipe-folder-menu"
-                        anchorEl={menuState}
-                        open={Boolean(menuState)}
-                        onClose={menuCloseHandler}
-                        getContentAnchorEl={null}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <MenuItem onClick={dialogOpenHandler('edit')}>
-                          <Typography>Edit Details</Typography>
-                        </MenuItem>
-                        <MenuItem onClick={dialogOpenHandler('delete')}>
-                          <Typography color="error">Delete Folder</Typography>
-                        </MenuItem>
-                      </Menu>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        ) : (
-          <LoaderContainer>
-            <CircularProgress size={60} />
-          </LoaderContainer>
-        )}
-      </Container>
+      <Container>{renderFolder()}</Container>
       <Dialog
         open={dialogState === 'delete'}
         onClose={dialogCloseHandler}

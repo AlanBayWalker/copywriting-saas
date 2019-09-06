@@ -9,6 +9,7 @@ import {
   TextField,
   DialogActions,
 } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import _ from 'lodash';
@@ -25,7 +26,6 @@ import {
   HiddenInput,
 } from './styles';
 import Typography from '../../components/Typography/Typography';
-import projects from '../../utility/projects';
 import { withContext } from '../../utility/context';
 
 const noImg =
@@ -70,6 +70,7 @@ const UserProfile = ({
   contextHandler,
 }) => {
   const [userState, setUserState] = useState({});
+  const [userProjects, setUserProjects] = useState([]);
   const [profileEditorState, setProfileEditorState] = useState(false);
   const [profileEditorError, setProfileEditorError] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -152,6 +153,10 @@ const UserProfile = ({
     } else {
       axios.get(`/user/${username}`).then(({ data }) => setUserState(data));
     }
+
+    axios.get(`/projects/user/${username}`).then(({ data }) => {
+      setUserProjects(data);
+    });
   }, [user, username]);
 
   return (
@@ -187,14 +192,20 @@ const UserProfile = ({
           {userState.user ? userState.user.bio : 'About Me'}
         </Typography>
         <ProjectsContainer justify="center" container spacing={3}>
-          {projects.map(
-            (config, index) =>
-              index < 6 && (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <BrowseItem path={pathname} {...config} />
-                </Grid>
+          {userProjects.length > 0
+            ? userProjects.map(
+                (config, index) =>
+                  index < 6 && (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <BrowseItem path={pathname} {...config} />
+                    </Grid>
+                  )
               )
-          )}
+            : _.times(6, i => (
+                <Grid item xs={12} sm={6} md={4} key={i}>
+                  <Skeleton variant="rect" height={270} />
+                </Grid>
+              ))}
         </ProjectsContainer>
       </Container>
 

@@ -10,9 +10,10 @@ import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
-import { DialogHeader, DialogActions } from './styles';
+import { DialogActions } from './styles';
 import Typography from '../../components/Typography/Typography';
 import { withContext } from '../../utility/context';
+import HeaderImage from '../../assets/dialog-auth-header.png';
 
 const LogIn = ({ contextHandler, context: { authDialog } }) => {
   const [errorState, setErrorState] = useState('');
@@ -56,20 +57,7 @@ const LogIn = ({ contextHandler, context: { authDialog } }) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogHeader>
-        <Typography
-          color="bold"
-          variant="h4"
-          component="h1"
-          align="center"
-          paragraph
-        >
-          LOG IN TO SWIPE CLOUD
-        </Typography>
-        <Typography align="center" paragraph>
-          Unlock your life one sale at the time!
-        </Typography>
-      </DialogHeader>
+      <img src={HeaderImage} />
       <DialogContent>
         <Formik
           initialValues={{ email: '', password: 'password' }}
@@ -137,7 +125,7 @@ const LogIn = ({ contextHandler, context: { authDialog } }) => {
                   disabled={isSubmitting}
                   fullWidth
                 >
-                  Log In
+                  Sign In
                 </Button>
               </DialogActions>
             </Form>

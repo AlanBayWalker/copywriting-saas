@@ -27,6 +27,7 @@ const SwipeDialog = ({
   setSwipeStatus,
 }) => {
   const [folders, setFolders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [page, setPage] = useState('folders');
 
@@ -70,11 +71,59 @@ const SwipeDialog = ({
 
   useEffect(() => {
     if (status) {
-      axios
-        .get('/swipe-folders')
-        .then(({ data }) => status && setFolders(data));
+      axios.get('/swipe-folders').then(({ data }) => {
+        setFolders(data);
+        setLoading(false);
+      });
     }
   }, [status]);
+
+  const renderFolders = () => {
+    if (loading) {
+      return (
+        <LoaderContainer>
+          <CircularProgress />
+        </LoaderContainer>
+      );
+    }
+    if (!loading && !folders.length) {
+      return (
+        <Typography align="center">You don't have any folders yet.</Typography>
+      );
+    }
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Item Count</TableCell>
+            <TableCell>Created</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {folders.map(({ name, projects, createdAt, folderId }) => (
+            <TableRow
+              key={folderId}
+              onClick={swipeProjectHandler(folderId, projects)}
+            >
+              <TableCell>
+                <Typography
+                  variant="subtitle2"
+                  display="inline"
+                  color="primary"
+                >
+                  <FolderIcon />
+                  {name}
+                </Typography>
+              </TableCell>
+              <TableCell>{projects.length}</TableCell>
+              <TableCell>{turnISOToDate(createdAt)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
 
   return (
     <Dialog
@@ -89,42 +138,7 @@ const SwipeDialog = ({
             Add this project to Swipe File
           </DialogTitle>
           <DialogContent>
-            {folders.length ? (
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Item Count</TableCell>
-                    <TableCell>Created</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {folders.map(({ name, projects, createdAt, folderId }) => (
-                    <TableRow
-                      key={folderId}
-                      onClick={swipeProjectHandler(folderId, projects)}
-                    >
-                      <TableCell>
-                        <Typography
-                          variant="subtitle2"
-                          display="inline"
-                          color="primary"
-                        >
-                          <FolderIcon />
-                          {name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>{projects.length}</TableCell>
-                      <TableCell>{turnISOToDate(createdAt)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <LoaderContainer>
-                <CircularProgress />
-              </LoaderContainer>
-            )}
+            {renderFolders()}
             {error && (
               <Typography color="error" variant="subtitle1" align="center">
                 {error}
